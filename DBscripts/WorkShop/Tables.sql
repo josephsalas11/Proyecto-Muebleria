@@ -101,7 +101,7 @@ CREATE TABLE [dbo].[Product]
     [idProduct]         bigint        NOT NULL,
     [idCategory]        tinyint       NOT NULL,
     [name]              nvarchar(100) NOT NULL,
-    [description]       nvarchar(200) NOT NULL,
+    [description]       nvarchar(300) NOT NULL,
     [photo]             nvarchar(200) NOT NULL,
     [manufacturingDate] date          NOT NULL,
     [productionCost]    money         NOT NULL,
