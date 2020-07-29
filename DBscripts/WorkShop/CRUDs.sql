@@ -322,12 +322,34 @@ AS
 
 	BEGIN TRAN
 
-	SELECT [idProduct], [idCategory], [name], [description], [manufacturingDate], [productionCost], [finalCost], [enable] 
+	SELECT [idProduct], [idCategory], [name], [description], [photo], [manufacturingDate], [productionCost], [finalCost], [enable]
 	FROM   [dbo].[Product] 
 	WHERE  ([idProduct] = @idProduct OR @idProduct IS NULL) 
 
 	COMMIT
 GO
+
+IF OBJECT_ID('[dbo].[sp_read_product_by_category]') IS NOT NULL
+    BEGIN
+        DROP PROC [dbo].[sp_read_product_by_category]
+    END
+GO
+CREATE PROC [dbo].[sp_read_product_by_category]
+@idCategory bigint
+AS
+    SET NOCOUNT ON
+    SET XACT_ABORT ON
+
+    BEGIN TRAN
+
+SELECT [idProduct], [idCategory], [name], [description], [photo], [manufacturingDate], [productionCost], [finalCost], [enable]
+FROM   [dbo].[Product]
+WHERE  ([idProduct] = @idCategory OR @idCategory IS NULL)
+
+    COMMIT
+GO
+
+
 IF OBJECT_ID('[dbo].[sp_create_product]') IS NOT NULL
 BEGIN 
     DROP PROC [dbo].[sp_create_product] 
@@ -337,7 +359,8 @@ CREATE PROC [dbo].[sp_create_product]
     @idProduct bigint,
     @idCategory tinyint,
     @name nvarchar(100),
-    @description nvarchar(200),
+    @description nvarchar(300),
+    @photo nvarchar(200),
     @manufacturingDate date,
     @productionCost money,
     @finalCost money,
@@ -348,11 +371,11 @@ AS
 	
 	BEGIN TRAN
 	
-	INSERT INTO [dbo].[Product] ([idProduct], [idCategory], [name], [description], [manufacturingDate], [productionCost], [finalCost], [enable])
-	SELECT @idProduct, @idCategory, @name, @description, @manufacturingDate, @productionCost, @finalCost, @enable
+	INSERT INTO [dbo].[Product] ([idProduct], [idCategory], [name], [description],[photo], [manufacturingDate], [productionCost], [finalCost], [enable])
+	SELECT @idProduct, @idCategory, @name, @description, @photo, @manufacturingDate, @productionCost, @finalCost, @enable
 	
 	-- Begin Return Select <- do not remove
-	SELECT [idProduct], [idCategory], [name], [description], [manufacturingDate], [productionCost], [finalCost], [enable]
+	SELECT [idProduct], [idCategory], [name], [description], [photo],[manufacturingDate], [productionCost], [finalCost], [enable]
 	FROM   [dbo].[Product]
 	WHERE  [idProduct] = @idProduct
 	-- End Return Select <- do not remove
@@ -368,7 +391,8 @@ CREATE PROC [dbo].[sp_update_product]
     @idProduct bigint,
     @idCategory tinyint,
     @name nvarchar(100),
-    @description nvarchar(200),
+    @description nvarchar(300),
+    @photo varchar(200),
     @manufacturingDate date,
     @productionCost money,
     @finalCost money,
@@ -380,7 +404,7 @@ AS
 	BEGIN TRAN
 
 	UPDATE [dbo].[Product]
-	SET    [idCategory] = @idCategory, [name] = @name, [description] = @description, [manufacturingDate] = @manufacturingDate, [productionCost] = @productionCost, [finalCost] = @finalCost, [enable] = @enable
+	SET    [idCategory] = @idCategory, [name] = @name, [description] = @description, [photo] = @photo, [manufacturingDate] = @manufacturingDate, [productionCost] = @productionCost, [finalCost] = @finalCost, [enable] = @enable
 	WHERE  [idProduct] = @idProduct
 	
 	-- Begin Return Select <- do not remove
