@@ -1,0 +1,73 @@
+:root {
+    --mainBlue: #2c2c2c;
+    --lightBlue: #008f8e;
+    --mainWhiteWrapper: #0a8b8a;
+    --mainDark: #232528;
+    --mainYellow: #ffa400;
+    --mainWhite: #f8f8f8;
+
+    /*--mainWhite: rgba(15, 78, 63, 0.1);  !* fallback for old browsers *!*/
+    /*--mainWhite: -webkit-linear-gradient(to right, rgba(45, 154, 110, 0.1), rgba(19, 99, 80, 0.1));  !* Chrome 10-25, Safari 5.1-6 *!*/
+    /*--mainWhite: linear-gradient(to right, rgba(45, 154, 110, 0.1), rgba(19, 99, 80, 0.1)); !* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+}
+
+body {
+    font-family: 'Oswald', sans-serif !important;
+    background: var(--mainWhite) !important;
+    color: var(--mainDark) !important;
+
+}
+
+
+.text-title {
+    font-family: 'Grenze Gotisch', cursive;
+    letter-spacing: 0.3rem;
+    text-transform: uppercase;
+}
+
+.text-blue {
+    color: var(--mainBlue);
+}
+
+.text-bright {
+    color: var(--lightBlue);
+}
+
+/*.App {*/
+/*  text-align: center;*/
+/*}*/
+
+/*.App-logo {*/
+/*  height: 40vmin;*/
+/*  pointer-events: none;*/
+/*}*/
+
+/*@media (prefers-reduced-motion: no-preference) {*/
+/*  .App-logo {*/
+/*    animation: App-logo-spin infinite 20s linear;*/
+/*  }*/
+/*}*/
+
+/*.App-header {*/
+/*  background-color: #282c34;*/
+/*  min-height: 100vh;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  font-size: calc(10px + 2vmin);*/
+/*  color: white;*/
+/*}*/
+
+/*.App-link {*/
+/*  color: #61dafb;*/
+/*}*/
+
+/*@keyframes App-logo-spin {*/
+/*  from {*/
+/*    transform: rotate(0deg);*/
+/*  }*/
+/*  to {*/
+/*    transform: rotate(360deg);*/
+/*  }*/
+/*}*/
