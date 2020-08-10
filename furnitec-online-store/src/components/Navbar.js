@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import logo from '../logo.svg';
 import {ButtonContainer} from "./Button";
 import styled from "styled-components";
+import {ProductConsumer} from "../context";
 
 class Navbar extends Component {
     render() {
@@ -15,12 +16,14 @@ class Navbar extends Component {
                     <img src={logo} alt="store" className="navbar-brand"/>
                 </Link>
                 <ul className="navbar-nav align-items-center">
-                    <li className="nav-item ml-5">
+                    <li className="nav-item ml-1">
                         <Link to="/" className="nav-link">
                             Productos
                         </Link>
                     </li>
                 </ul>
+
+
                 <Link to="/cart" className="ml-auto">
                     <ButtonContainer>
                         <span className="mr-2">
@@ -29,6 +32,33 @@ class Navbar extends Component {
                         Mi Carrito
                     </ButtonContainer>
                 </Link>
+
+                <ProductConsumer>
+                    {value => {
+                        if (value.loginPerson.length === 0) {
+                            return (
+                                <ButtonContainer className="ml-2"
+                                                 disabled={!value.loginPerson}
+                                                 onClick={() => {
+                                                     value.openLoginModal()
+                                                 }
+                                                 }>
+                                    Iniciar Sesion
+                                </ButtonContainer>
+                            )
+                        } else {
+                            return (
+                                <ul className="navbar-nav align-items-center">
+                                    <li className="nav-link ml-2">
+                                        Bienvenido {value.loginPerson.username}
+                                    </li>
+                                </ul>
+                            )
+                        }
+
+                    }}
+                </ProductConsumer>
+
             </NavWrapper>
 
         );

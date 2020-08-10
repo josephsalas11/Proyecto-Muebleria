@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import Product from "./Product";
 import Title from "./Title";
 import {ProductConsumer} from "../context";
@@ -28,6 +28,7 @@ class ProductList extends Component {
                         <Title name="Nuestros" title="Productos"/>
                         <ProductConsumer>
                             {value => {
+                                console.log(value.categorias);
                                 return <StyledSelect>
                                     <div className="user-select">
                                         <div className="row">
@@ -98,4 +99,5 @@ const StyledSelect = styled.div`
         font-size: 1.5rem !important;
     }
     `;
+
 

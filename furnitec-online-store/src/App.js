@@ -5,9 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from "./components/Navbar";
 import ProductList from "./components/ProductList";
 import Details from "./components/Details";
-import Cart from "./components/Cart";
+import Cart from "./components/Cart/Cart";
 import Modal from "./components/Modal"
 import Default from "./components/Default";
+import LoginModal from "./components/Login/LoginModal";
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route component={Default}/>
             </Switch>
             <Modal/>
+            <LoginModal/>
         </React.Fragment>
     );
 }
