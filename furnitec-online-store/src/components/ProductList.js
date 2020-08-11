@@ -28,7 +28,6 @@ class ProductList extends Component {
                         <Title name="Nuestros" title="Productos"/>
                         <ProductConsumer>
                             {value => {
-                                console.log(value.categorias);
                                 return <StyledSelect>
                                     <div className="user-select">
                                         <div className="row">

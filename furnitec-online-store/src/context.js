@@ -15,7 +15,10 @@ class ProductProvider extends Component {
         modalProduct: [],
         loginModalOpen: false,
         loginPerson: [], // {idUser: "1", username: "Juan"}
+        isLoginPerson: false,
+        coupon: 0,
         cartSubTotal: 0,
+        cartDiscount: 0,
         cartTax: 0,
         cartTotal: 0
     };
@@ -52,13 +55,14 @@ class ProductProvider extends Component {
         fetch(`http://localhost:5000/coupon?idUser=${idUser}&coupon=${coupon}`)
             .then(res => res.json())
             .then((data) => {
-                console.log(data.recordsets)
+                this.setState({coupon: Number(data.recordsets[0][0].result)});
+                this.addTotals();
             })
             .catch(console.log);
     }
 
     setLoginPerson = (idUser, username) => {
-        this.setState({loginPerson: {idUser: idUser, username: username}})
+        this.setState({loginPerson: {idUser: idUser, username: username}, isLoginPerson: true})
     }
 
 
@@ -94,6 +98,7 @@ class ProductProvider extends Component {
             };
         }, this.addTotals);
     };
+
 
     isProductInCart = (idProduct) => {
         return this.state.productsInCart.find(item => item.idProduct === idProduct.toString()) !== undefined;
@@ -191,11 +196,17 @@ class ProductProvider extends Component {
                 return subTotal
             }
         );
-        const tempTax = subTotal * 0.1;
+
+        const temDiscount = subTotal * (this.state.coupon / 100);
+        const discount = parseFloat(temDiscount.toFixed(2));
+        const tempTax = subTotal * 0.13;
         const tax = parseFloat(tempTax.toFixed(2));
-        const total = subTotal + tax;
+        const temTotal = (subTotal - discount) + tax;
+        const total = parseFloat(temTotal.toFixed(2));
+
         return {
             subTotal,
+            discount,
             tax,
             total
         };
@@ -207,6 +218,7 @@ class ProductProvider extends Component {
             () => {
                 return {
                     cartSubTotal: totals.subTotal,
+                    cartDiscount: totals.discount,
                     cartTax: totals.tax,
                     cartTotal: totals.total
                 };
@@ -260,7 +272,8 @@ class ProductProvider extends Component {
                 removeItem: this.removeItem,
                 getItem: this.getItem,
                 clearCart: this.clearCart,
-                setLoginPerson: this.setLoginPerson
+                setLoginPerson: this.setLoginPerson,
+                getSPValidateCoupon: this.getSPValidateCoupon
                 // getSPLogIn: this.getSPLogIn
 
             }}>

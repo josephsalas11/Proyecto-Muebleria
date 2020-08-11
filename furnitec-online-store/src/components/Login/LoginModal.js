@@ -275,12 +275,12 @@ class RegisterBox extends React.Component {
     }
 
     onBirthDateChange = (date) => {
-        console.log(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`);
+        this.setState({birthDate: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`})
         this.clearValidationErr("birthDate");
     }
 
-    onCityChange(e) {
-        this.setState({city: e.target.value});
+    onCityChange(city) {
+        this.setState({city: city});
         this.clearValidationErr("city");
     }
 
@@ -311,33 +311,43 @@ class RegisterBox extends React.Component {
         console.log("Hello world!");
     }
 
-    submitRegister(e) {
-        console.log(this.state);
+    submitRegister() {
+        let numErrors = 0;
         if (this.state.name === "") {
             this.showValidationErr("name", "Debe ingresar el nombre");
+            numErrors += 1;
         }
         if (this.state.lastname === "") {
             this.showValidationErr("lastname", "Debe ingresar el apellido");
+            numErrors += 1;
         }
         if (this.state.birthDate === "") {
             this.showValidationErr("birthDate", "Debe ingresar la fecha de nacimiento");
+            numErrors += 1;
         }
         if (this.state.city === "") {
             this.showValidationErr("city", "Debe ingresar el cantón");
+            numErrors += 1;
         }
         if (this.state.username === "") {
             this.showValidationErr("username", "Debe ingresar el nombre de usuario");
+            numErrors += 1;
         }
         if (this.state.email === "") {
             this.showValidationErr("email", "Debe ingresar el correo");
+            numErrors += 1;
         }
         if (this.state.password === "") {
             this.showValidationErr("password", "Debe ingresar la contraseña");
+            numErrors += 1;
         }
+        return numErrors;
+
     }
 
     handleCityChange(e) {
         this.setState({selectedCity: e});
+        this.onCityChange(e.value)
     }
 
     render() {
@@ -385,166 +395,183 @@ class RegisterBox extends React.Component {
             pwdStrong = true;
         }
 
-        const {cities} = this.props.value;
-
-        return (
-
-            <div className="inner-container">
-                <div className="header">
-                    Registrarse
-                </div>
-                <div className="box">
-                    <div className="input-group">
-                        <label htmlFor="name">Nombre</label>
-                        <input
-                            type="text"
-                            name="name"
-                            className="login-input"
-                            placeholder="Name"
-                            onChange={this
-                                .onNameChange
-                                .bind(this)}/>
-                        <small className="danger-error">{nameErr
-                            ? nameErr
-                            : ""}</small>
+        const {cities, loginModalOpen, closeLoginModal, setLoginPerson} = this.props.value;
+        if (!loginModalOpen) {
+            return null;
+        } else {
+            return (
+                <div className="inner-container">
+                    <div className="header">
+                        Registrarse
                     </div>
-                    <div className="input-group">
-                        <label htmlFor="lastname">Apellido</label>
-                        <input
-                            type="text"
-                            name="lastname"
-                            className="login-input"
-                            placeholder="Lastname"
-                            onChange={this
-                                .onLastnameChange
-                                .bind(this)}/>
-                        <small className="danger-error">{lastnameErr
-                            ? lastnameErr
-                            : ""}</small>
-                    </div>
-
-                    <div className="input-group">
-                        <label htmlFor="birthDate">Fecha de nacimiento</label>
-
-                        <div className="date-input">
-                            <DayPickerInput classNames="date-input" onDayChange={day =>
-                                this.onBirthDateChange(day)
-                            }/>
+                    <div className="box">
+                        <div className="input-group">
+                            <label htmlFor="name">Nombre</label>
+                            <input
+                                type="text"
+                                name="name"
+                                className="login-input"
+                                placeholder="Name"
+                                onChange={this
+                                    .onNameChange
+                                    .bind(this)}/>
+                            <small className="danger-error">{nameErr
+                                ? nameErr
+                                : ""}</small>
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="lastname">Apellido</label>
+                            <input
+                                type="text"
+                                name="lastname"
+                                className="login-input"
+                                placeholder="Lastname"
+                                onChange={this
+                                    .onLastnameChange
+                                    .bind(this)}/>
+                            <small className="danger-error">{lastnameErr
+                                ? lastnameErr
+                                : ""}</small>
                         </div>
 
-                        <small className="danger-error">{birthDateErr
-                            ? birthDateErr
-                            : ""}</small>
-                    </div>
+                        <div className="input-group">
+                            <label htmlFor="birthDate">Fecha de nacimiento</label>
 
-                    <div className="input-group">
-                        <label htmlFor="city">Direccion</label>
-                        <StyledSelect>
-                            <div className="user-select">
-                                <div className="row">
-                                    <div className="col col-sm-12">
-                                        <Select
-                                            placeholder="Select Option"
-                                            value={this.state.selectedCity} // set selected value
-                                            options={cities} // set list of the data
-                                            onChange={this.handleCityChange} // assign onChange function
-                                            theme={(theme) => ({
-                                                ...theme,
-                                                colors: {
-                                                    ...theme.colors,
-                                                    text: 'orangered',
-                                                    primary25: 'neutral5',
-                                                    primary: 'var(--lightBlue)',
-                                                },
-                                            })}
-                                        />
+                            <div className="date-input">
+                                <DayPickerInput classNames="date-input" onDayChange={day =>
+                                    this.onBirthDateChange(day)
+                                }/>
+                            </div>
+
+                            <small className="danger-error">{birthDateErr
+                                ? birthDateErr
+                                : ""}</small>
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="city">Direccion</label>
+                            <StyledSelect>
+                                <div className="user-select">
+                                    <div className="row">
+                                        <div className="col col-sm-12">
+                                            <Select
+                                                placeholder="Select Option"
+                                                value={this.state.selectedCity} // set selected value
+                                                options={cities} // set list of the data
+                                                onChange={this.handleCityChange} // assign onChange function
+                                                theme={(theme) => ({
+                                                    ...theme,
+                                                    colors: {
+                                                        ...theme.colors,
+                                                        text: 'orangered',
+                                                        primary25: 'neutral5',
+                                                        primary: 'var(--lightBlue)',
+                                                    },
+                                                })}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </StyledSelect>
+                            </StyledSelect>
 
-                        <small className="danger-error">{usernameErr
-                            ? usernameErr
-                            : ""}</small>
+                            <small className="danger-error">{usernameErr
+                                ? usernameErr
+                                : ""}</small>
+                        </div>
+
+
+                        <div className="input-group">
+                            <label htmlFor="username">Nombre de Usuario</label>
+                            <input
+                                type="text"
+                                name="username"
+                                className="login-input"
+                                placeholder="Username"
+                                onChange={this
+                                    .onUsernameChange
+                                    .bind(this)}/>
+                            <small className="danger-error">{usernameErr
+                                ? usernameErr
+                                : ""}</small>
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="text"
+                                name="email"
+                                className="login-input"
+                                placeholder="Email"
+                                onChange={this
+                                    .onEmailChange
+                                    .bind(this)}/>
+                            <small className="danger-error">{emailErr
+                                ? emailErr
+                                : ""}</small>
+                        </div>
+
+                        <div className="input-group">
+                            <label htmlFor="password">Contraseña</label>
+                            <input
+                                type="password"
+                                name="password"
+                                className="login-input"
+                                placeholder="Password"
+                                onChange={this
+                                    .onPasswordChange
+                                    .bind(this)}/>
+                            <small className="danger-error">{passwordErr
+                                ? passwordErr
+                                : ""}</small>
+
+                            {this.state.password && <div className="password-state">
+                                <div
+                                    className={"pwd pwd-weak " + (pwdWeak
+                                        ? "show"
+                                        : "")}/>
+                                <div
+                                    className={"pwd pwd-medium " + (pwdMedium
+                                        ? "show"
+                                        : "")}/>
+                                <div
+                                    className={"pwd pwd-strong " + (pwdStrong
+                                        ? "show"
+                                        : "")}/>
+                            </div>}
+
+                        </div>
+
+                        <button
+                            type="button"
+                            className="login-btn"
+                            onHover={this
+                                .openPopup
+                                .bind(this)}
+                            onClick={
+                                () => {
+                                    console.log(' aqui1')
+                                    let numErrors = this.submitRegister();
+                                    if (numErrors === 0) {
+                                        console.log(' aqui2')
+                                        fetch(`http://localhost:5000/register?p_name=${this.state.name}&p_lastname=${this.state.lastname}&p_birthdate=${this.state.birthDate}&p_address=${this.state.city}&p_email=${this.state.email}&p_username=${this.state.username}&p_password=${this.state.password}`)
+                                            .then(res => res.json())
+                                            .then((data) => {
+                                                const idUser = data.recordsets[0][0].result
+                                                console.log('idUser' + idUser)
+                                                closeLoginModal();
+                                                setLoginPerson(Number(idUser), this.state.username);
+
+                                            })
+                                            .catch(console.log);
+                                    }
+                                }
+                            }>Registrarse
+                        </button>
+
                     </div>
-
-
-                    <div className="input-group">
-                        <label htmlFor="username">Nombre de Usuario</label>
-                        <input
-                            type="text"
-                            name="username"
-                            className="login-input"
-                            placeholder="Username"
-                            onChange={this
-                                .onUsernameChange
-                                .bind(this)}/>
-                        <small className="danger-error">{usernameErr
-                            ? usernameErr
-                            : ""}</small>
-                    </div>
-
-                    <div className="input-group">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="text"
-                            name="email"
-                            className="login-input"
-                            placeholder="Email"
-                            onChange={this
-                                .onEmailChange
-                                .bind(this)}/>
-                        <small className="danger-error">{emailErr
-                            ? emailErr
-                            : ""}</small>
-                    </div>
-
-                    <div className="input-group">
-                        <label htmlFor="password">Contraseña</label>
-                        <input
-                            type="password"
-                            name="password"
-                            className="login-input"
-                            placeholder="Password"
-                            onChange={this
-                                .onPasswordChange
-                                .bind(this)}/>
-                        <small className="danger-error">{passwordErr
-                            ? passwordErr
-                            : ""}</small>
-
-                        {this.state.password && <div className="password-state">
-                            <div
-                                className={"pwd pwd-weak " + (pwdWeak
-                                    ? "show"
-                                    : "")}/>
-                            <div
-                                className={"pwd pwd-medium " + (pwdMedium
-                                    ? "show"
-                                    : "")}/>
-                            <div
-                                className={"pwd pwd-strong " + (pwdStrong
-                                    ? "show"
-                                    : "")}/>
-                        </div>}
-
-                    </div>
-
-                    <button
-                        type="button"
-                        className="login-btn"
-                        onHover={this
-                            .openPopup
-                            .bind(this)}
-                        onClick={this
-                            .submitRegister
-                            // .openPopup
-                            .bind(this)}>Registrarse
-                    </button>
-
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 

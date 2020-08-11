@@ -47,7 +47,7 @@ export default class CartItem extends Component {
                     </div>
                 </div>
 
-                <div className="col-10 mx-auto col-lg-2 my-4">
+                <div className="col-10 mx-auto col-lg-2 mt-auto mb-auto">
                     <strong><span className="d-lg-none">Total:</span> ${count * item.finalCost} </strong>
                 </div>
             </div>

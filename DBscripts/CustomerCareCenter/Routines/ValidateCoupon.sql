@@ -16,7 +16,7 @@ BEGIN
             select 0 as result;
         end if;
     else
-        select 2 as result;
+        select 0 as result;
     end if;
 END$$
 DELIMITER ;

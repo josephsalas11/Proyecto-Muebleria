@@ -171,3 +171,143 @@ INSERT INTO [dbo].Product(idProduct, idCategory, name, description, photo, manuf
                           enable)
 VALUES (32, 5, 'Silla Exterior Texas', 'Medidas: 60x59x75cm Material: Aluminio',
         'https://www.alteadesign.com/10398-large_default/silla-exterior-texas.jpg', '2020-01-29', 168, 379, 1);
+
+
+-- Subsidiary
+
+INSERT INTO Subsidiary (idSubsidiary, name, address, provincia)
+VALUES (1, 'Sucursal Cartago', geography::Point(9.876913, -83.903645, 4326), 'Cartago')
+
+
+-----------
+
+
+USE [Workshop]
+GO
+
+INSERT INTO [dbo].[Product]
+([idProduct]
+,[idCategory]
+,[name]
+,[description]
+,[photo]
+,[manufacturingDate]
+,[productionCost]
+,[finalCost]
+,[enable])
+VALUES
+(6,3,'Cama Individual' ,'Cama de 1x1.5 metros con acabado de yipson',
+ 'https://gollo-prod-grupounicomer.netdna-ssl.com/media/catalog/product/cache/b0a55a6bc5da505f12fc291d1ff66806/4/2/4201010620.jpg','2018-01-06' ,275,
+ 325,1),
+(7,4,'Silla de escritorio Raptor' ,'Silla de oficina ortopédica para posicion de espalda',
+ 'https://media.nidux.net/pull/800/599/3190/93759_product_5b282ed5dd3aealt%20%20silla-oficina-elegante-moderna-cuero-negro.jpg','2020-02-26' ,175,
+ 250,1),
+(8,4,'Escritorio de madera' ,'Escritorio con madera de pino y acabados en marmol',
+ 'https://i.pinimg.com/564x/f7/ca/52/f7ca52a3002207bf1b0f42028e38a5a0.jpg','2017-08-06' ,750,
+ 1075,1),
+(9,5,'Trampolin de exterior' ,'Trampolin 5x5 metros para niños',
+ 'https://images-na.ssl-images-amazon.com/images/I/61bBT06psFL._AC_SX425_.jpg','2019-07-06' ,368,
+ 500,1)
+GO
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+USE [Workshop]
+GO
+
+INSERT INTO [dbo].[Subsidiary]
+([idSubsidiary]
+,[name]
+,[address]
+,[provincia])
+VALUES
+(1,'FurniTEC Cartago',geography::Point(9.863237, -83.913084, 4326),'Cartago'),
+(2,'FurniTEC San Jose',geography::Point(9.930754, -84.045469, 4326),'San Jose'),
+(3,'FurniTEC Alajuela',geography::Point(10.012575, -84.213294, 4326),'Alajuela')
+GO
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+USE [Workshop]
+GO
+
+INSERT INTO [dbo].[Stock]
+([idStock]
+,[idProduct]
+,[idSubsidiary]
+,[quantity])
+VALUES
+(1,1,1,32),(2,1,2,15),(3,1,3,16),(4,2,1,12),(5,2,2,3),(6,2,3,14),
+(7,3,1,17),(8,3,2,2),(9,3,3,22),(10,4,1,13),(11,4,2,32),(12,4,3,16),
+(13,5,1,18),(14,5,2,39),(15,5,3,12),(16,6,1,1),(17,6,2,14),(18,6,3,32),
+(19,7,1,36),(20,7,2,14),(21,7,3,14),(22,8,1,12),(23,8,2,32),(24,8,3,1)
+GO
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO [dbo].[ContactType]
+([idContactType]
+,[name]
+,[description]
+,[enable])
+VALUES
+(1,'Numero telefonico','Contacto via llamada y whatsapp',1),
+(2,'Correo electronico','Contacto via correo electronico',1),
+(3,'Instagram','Contacto via instagram',1)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO [dbo].[SubsidiaryContact]
+([idSubsidiaryContact]
+,[idSubsidiary]
+,[idTypeContact]
+,[contact]
+,[enable])
+VALUES
+(1,1,1,'70708989',1),
+(2,1,2,'furcartago@gmail.com',1),
+(3,1,3,'FurTEC_CAR',1),
+(4,2,1,'70769989',1),
+(5,2,2,'fursj@gmail.com',1),
+(6,3,1,'70148989',1),
+(7,3,2,'furalj@gmail.com',1),
+(8,3,3,'FurTEC_ALJ',1)
+GO
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+USE [Workshop]
+GO
+
+INSERT INTO [dbo].[Employee]
+([idEmployee]
+,[idSubsidiary]
+,[user]
+,[photo])
+VALUES
+(1,1,36,'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg'),
+(2,1,37,'https://laboratoriosniam.com/wp-content/uploads/2018/07/michael-dam-258165-unsplash_WEB2.jpg'),
+(3,1,38,'https://laboratoriosniam.com/wp-content/uploads/2018/07/personas-felices-tiempoparasimismos.jpg'),
+(4,1,39,'https://laboratoriosniam.com/wp-content/uploads/2018/07/personas-felices-quimica.jpg'),
+(5,1,40,'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg'),
+(6,1,41,'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg')
+GO
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+USE [Workshop]
+GO
+
+INSERT INTO [dbo].[Job]
+([idJob]
+,[name]
+,[description]
+,[enable])
+VALUES
+(1,'Gerente General','Gerente general de tienda',1),
+(2,'Vendedor','Vendedor de zona',1),
+(3,'Repartidor','Mensajeria delivery',1),
+(5,'Mantenimiento','Servicio de mantenimiento a muebles',1)
+
+GO

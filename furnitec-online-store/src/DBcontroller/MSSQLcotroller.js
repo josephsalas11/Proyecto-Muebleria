@@ -130,6 +130,25 @@ app.get('/coupon', (req, res) => {
     });
 });
 
+// EXEC RegisterPurchase @user = 6, @subsidiary=null, @products = '1:2&2:2&3:3', @coupon= 1.5;
+// localhost:5000/purchase?user=6&products=1:2_2:2_3:3&coupon=1.5
+app.get('/purchase', (req, res) => {
+    const {user} = req.query;
+    const {products} = req.query;
+    const {coupon} = req.query;
+
+    const SP_RegisterPurchase = `EXEC RegisterPurchase @user = '${user}', @subsidiary = null, @products = '${products}', @coupon = '${coupon}'`;
+    connection.query(SP_RegisterPurchase, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
+
+
 
 app.listen(5000, function () {
     console.log('Server is running..');

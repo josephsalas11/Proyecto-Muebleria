@@ -2,7 +2,7 @@
     --mainBlue: #2c2c2c;
     --lightBlue: #008f8e;
     --mainWhiteWrapper: #0a8b8a;
-    --mainDark: #232528;
+    --mainDark: #2d2d2d;
     --mainBlack: #000;
     --mainYellow: #ffa400;
     --mainWhite: #f8f8f8;
@@ -173,6 +173,19 @@ body,
     background: rgba(15, 15, 15, 0.01);
 }
 
+.coupon-input {
+    height: 39px;
+    width: 242px;
+    border-radius: 5px;
+    border: 1px solid var(--lightBlue);
+    transition: border 0.4s ease-out;
+    padding: 13px;
+    font-family: Oxygen, sans-serif;
+    font-size: 19px;
+    color: #3e3e42;
+    background: rgba(15, 15, 15, 0.01);
+}
+
 .date-input {
     /*height: 2.1em;*/
     border-radius: 3px;
@@ -191,6 +204,9 @@ body,
 }
 
 .date-input:hover {
+    border: 2px solid var(--lightBlue);
+}
+.coupon-input:hover {
     border: 2px solid var(--lightBlue);
 }
 
@@ -220,6 +236,24 @@ body,
     cursor: pointer;
 }
 
+.coupon-btn {
+    /*padding: 2px 30px;*/
+    /* background-color: #417cef; */
+    /*border: 0;*/
+    height: 39px;
+    width: 242px;
+    font-size: 18px;
+    border-radius: 3px;
+    font-family: Oxygen, sans-serif;
+    background-color: var(--mainWhite);
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border: 1px solid var(--lightBlue);
+    transition: background-color 0.3s ease-out;
+    cursor: pointer;
+    color: var(--mainWhiteWrapper) !important;
+}
+
 .login-btn:hover,
 .login-btn:focus {
     background-color: var(--lightBlue);
@@ -227,9 +261,21 @@ body,
     color: var(--mainDark);
 }
 
+.coupon-btn:hover,
+.coupon-btn:focus {
+    background-color: var(--lightBlue);
+    /*border: 2px solid var(--mainDark);*/
+    color: var(--mainWhite) !important;;
+}
+
 .danger-error {
     color: #e74c3c;
     font-size: 16px;
+}
+
+.coupon-applied {
+    color: #008f8e;
+    font-size: 20px;
 }
 
 .password-state {
