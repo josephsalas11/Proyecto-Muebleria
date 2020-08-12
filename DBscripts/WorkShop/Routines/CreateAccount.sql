@@ -34,5 +34,5 @@ ALTER PROCEDURE [dbo].[create_account] @p_name varchar(50),@p_lastname varchar(5
     END
 
 
-    EXEC create_account 'name', 'lastname', '1995-08-01', 'Tejar', 'mperez@gmail.com', 'username', 'password';
---     EXEC create_account @p_name = 'juanpa', @p_lastname = 'martinez', @p_birthdate = '2020-8-4', @p_address= 'Tejar', @p_email='jpmb1220@gmail.com', @p_username = 'username', @p_password = 'password'
+--     EXEC create_account 'name', 'lastname', '1995-08-01', 'Tejar', 'email@gmail.com', 'username', 'password';
+--     EXEC create_account @p_name = 'carlos', @p_lastname = 'brenes', @p_birthdate = '1980-4-11', @p_address= 'San Rafael', @p_email='cbrenes@gmail.com', @p_username = 'carlos123', @p_password = 'carlos321'

@@ -467,8 +467,8 @@ class RegisterBox extends React.Component {
                                 </div>
                             </StyledSelect>
 
-                            <small className="danger-error">{usernameErr
-                                ? usernameErr
+                            <small className="danger-error">{cityErr
+                                ? cityErr
                                 : ""}</small>
                         </div>
 
@@ -550,7 +550,7 @@ class RegisterBox extends React.Component {
                                                 const idUser = data.recordsets[0][0].result
                                                 console.log('idUser: ' + idUser)
                                                 closeLoginModal();
-                                                setLoginPerson(Number(idUser), this.state.username);
+                                                setLoginPerson(Number(idUser), this.state.name);
 
                                             })
                                             .catch(console.log);

@@ -75,10 +75,12 @@ export default class CartTotals extends Component {
                                                     this.setState({couponApplied: 'Cupón Aplicado'});
                                                     this.setState({couponFail: ''});
                                                 } else {
-                                                    this.setState({couponFail: 'Cupón Inválido'})
+                                                    this.setState({couponFail: 'Cupón Inválido'});
+                                                    this.setState({couponApplied: ''});
                                                 }
                                             } else {
-                                                this.setState({couponFail: 'Debe Iniciar Sesión'})
+                                                this.setState({couponFail: 'Debe Iniciar Sesión'});
+                                                this.setState({couponApplied: ''});
                                             }
                                         }
                                     }>Aplicar Código

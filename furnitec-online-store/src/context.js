@@ -17,6 +17,8 @@ class ProductProvider extends Component {
         paymentModalOpen: false,
         loginPerson: [], // {idUser: "1", username: "Juan"}
         isLoginPerson: false,
+        isAdmin: false,
+        idSubsidiary: 0,
         coupon: 0,
         cartSubTotal: 0,
         cartDiscount: 0,
@@ -30,7 +32,7 @@ class ProductProvider extends Component {
         this.getCities();
 
         // test
-        // this.setLoginPerson(1, 'username');
+        this.setLoginPerson(2, 'username');
     };
 
     getProductos = () => {
@@ -53,26 +55,42 @@ class ProductProvider extends Component {
             .catch(console.log);
     }
 
-    registerPurchase = () => {
+    getSPisAdmin = (idUser) => {
+        fetch(`http://localhost:5000/isAdmin?idUser=${idUser}`)
+            .then(res => res.json())
+            .then((data) => {
+                console.log('is admin: ' + data.recordsets[0][0].result)
+                if (Number(data.recordsets[0][0].result) === 1) {
+                    this.setState({isAdmin: true});
+                } else {
+                    this.setState({isAdmin: false});
+                }
+            })
+            .catch(console.log);
+    }
+
+    registerPurchase = (delivery) => {
         let products = this.state.productsInCart;
         let temProducts = '';
         for (const i in products) {
             temProducts += `${Number(products[i].idProduct)}:${products[i].count}_`
         }
         temProducts = temProducts.slice(0, -1);
-
-        fetch(`http://localhost:5000/purchase?user=${this.state.loginPerson.idUser}&products=${temProducts}&coupon=${this.state.coupon}`)
+        let test = `http://localhost:5000/purchase?user=${this.state.loginPerson.idUser}&products=${temProducts}&coupon=${this.state.coupon}&delivery=${delivery}`;
+        console.log(test)
+        fetch(test)
             .then(res => res.json())
             .then((data) => {
-                console.log('purchase data: '+ data.recordsets[0][0])
+                this.setState({idSubsidiary: data.recordsets[0][0].idSubsidiary})
+                console.log('purchase data: ' + data.recordsets[0][0].idSubsidiary)
             })
             .catch(console.log);
     }
 
     setLoginPerson = (idUser, username) => {
-        this.setState({loginPerson: {idUser: idUser, username: username}, isLoginPerson: true})
+        this.setState({loginPerson: {idUser: idUser, username: username}, isLoginPerson: true});
+        this.getSPisAdmin(idUser);
     }
-
 
     getCategorias = () => {
         fetch('http://localhost:5000/categories')
@@ -107,7 +125,6 @@ class ProductProvider extends Component {
         }, this.addTotals);
     };
 
-
     isProductInCart = (idProduct) => {
         return this.state.productsInCart.find(item => item.idProduct === idProduct.toString()) !== undefined;
 
@@ -130,9 +147,11 @@ class ProductProvider extends Component {
             return {modalProduct: product, modalOpen: true};
         });
     };
+
     openLoginModal = () => {
         this.setState({loginModalOpen: true})
     };
+
     openPaymentModal = () => {
         this.setState({paymentModalOpen: true})
     };
@@ -227,6 +246,17 @@ class ProductProvider extends Component {
         };
     };
 
+    getSubsidiary = () => {
+        let idSubsidiary = this.state.idSubsidiary;
+        if (idSubsidiary === 1) {
+            return 'Cartago'
+        } else if (idSubsidiary === 2) {
+            return 'San Jose'
+        } else if (idSubsidiary === 3) {
+            return 'Alajuela'
+        }
+    }
+
     addTotals = () => {
         const totals = this.getTotals();
         this.setState(
@@ -291,7 +321,8 @@ class ProductProvider extends Component {
                 clearCart: this.clearCart,
                 setLoginPerson: this.setLoginPerson,
                 getSPValidateCoupon: this.getSPValidateCoupon,
-                registerPurchase: this.registerPurchase
+                registerPurchase: this.registerPurchase,
+                getSubsidiary: this.getSubsidiary
             }}>
                 {this.props.children}
             </ProductContext.Provider>

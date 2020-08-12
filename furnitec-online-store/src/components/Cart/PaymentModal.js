@@ -70,20 +70,20 @@ export default class PaymentModal extends Component {
                                                                     onClick={this
                                                                         .showRegisterBox
                                                                         .bind(this)}>
-                                                                    Pago en efectivo
+                                                                    Pago en Sucursal
                                                                 </div>
                                                             </div>
 
                                                             <FadeTransition isOpen={this.state.isLoginOpen}
                                                                             duration={0}>
                                                                 <div className="box-container">
-                                                                    {/*<OnlinePaymentBox value={value}/>*/}
+                                                                    <OnlinePaymentBox value={value}/>
                                                                 </div>
                                                             </FadeTransition>
                                                             <FadeTransition isOpen={this.state.isRegisterOpen}
                                                                             duration={0}>
                                                                 <div className="box-container">
-                                                                    <CashPaymentBox value={value}/>
+                                                                    <SubsidiaryPaymentBox value={value}/>
                                                                 </div>
                                                             </FadeTransition>
 
@@ -91,7 +91,7 @@ export default class PaymentModal extends Component {
                                                                 type="button"
                                                                 className="login-btn mr-auto ml-auto"
                                                                 onClick={closePaymentModal}>
-                                                                Salir
+                                                                Cancelar
                                                             </button>
                                                         </div>
 
@@ -126,7 +126,7 @@ const ModalContainer = styled.div`
   }
 `;
 
-class CashPaymentBox extends React.Component {
+class SubsidiaryPaymentBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -136,59 +136,147 @@ class CashPaymentBox extends React.Component {
     }
 
     render() {
-        const {paymentModalOpen, closePaymentModal, registerPurchase} = this.props.value;
+        const {paymentModalOpen, registerPurchase, getSubsidiary, clearCart} = this.props.value;
         if (!paymentModalOpen) {
             return null;
         } else {
             return (
                 <div className="inner-container">
                     <div className="header">
-                        Pago en efectivo
+                        Pago en Sucursal
                     </div>
                     <div className="box">
-
-                        {/*<div className="input-group">*/}
-                        {/*    <label htmlFor="username">Nombre de usuario</label>*/}
-                        {/*    <input*/}
-                        {/*        type="text"*/}
-                        {/*        name="username"*/}
-                        {/*        className="login-input"*/}
-                        {/*        placeholder="Username"*/}
-                        {/*        onChange={this*/}
-                        {/*            .onUsernameChange*/}
-                        {/*            .bind(this)}/>*/}
-                        {/*</div>*/}
-
-                        {/*<div className="input-group">*/}
-                        {/*    <label htmlFor="password">Contraseña</label>*/}
-                        {/*    <input*/}
-                        {/*        type="password"*/}
-                        {/*        name="password"*/}
-                        {/*        className="login-input"*/}
-                        {/*        placeholder="Password"*/}
-                        {/*        onChange={this*/}
-                        {/*            .onPasswordChange*/}
-                        {/*            .bind(this)}/>*/}
-                        {/*</div>*/}
-
-                        {/*<small className="danger-error">{this.state.error*/}
-                        {/*    ? "Usuario o contraseña incorrecta"*/}
-                        {/*    : ""}</small>*/}
-
                         <button
                             type="button"
                             className="login-btn"
+                            disabled={this.state.confirmed}
+                            hidden={this.state.confirmed}
                             onClick={
                                 () => {
-                                    registerPurchase();
-                                    this.setState({message: 'Pedido confirmado. Su pedido se procesó en: '})
+                                    registerPurchase(false);
+                                    this.setState({confirmed: true});
                                 }
                             }>
                             Confirmar Pedido
                         </button>
                         <small className="coupon-applied">{this.state.confirmed
-                            ? this.state.message
+                            ? 'Su pago se procesó en la sucursal ' + getSubsidiary()
                             : ""}</small>
+                        <button
+                            type="button"
+                            className="login-btn"
+                            disabled={!this.state.confirmed}
+                            hidden={!this.state.confirmed}
+                            onClick={
+                                () => {
+                                    clearCart();
+                                }
+                            }>
+                            Aceptar
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+}
+
+
+class OnlinePaymentBox extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            confirmed: false,
+            message: '',
+            error: true,
+            errorMessage: ''
+        };
+    }
+
+    onTarjetaChange(e) {
+        if (e.target.value === '') {
+            this.setState({error: true})
+        } else {
+            this.setState({error: false})
+            this.setState({errorMessage: ''})
+        }
+    }
+
+    render() {
+        const {paymentModalOpen, registerPurchase, getSubsidiary, clearCart} = this.props.value;
+        if (!paymentModalOpen) {
+            return null;
+        } else {
+            return (
+                <div className="inner-container">
+                    <div className="header">
+                        Pago en Linea
+                    </div>
+                    <div className="box">
+
+                        <div className="input-group">
+                            <label htmlFor="username">Número de tarjeta</label>
+                            <input
+                                type="text"
+                                name="username"
+                                className="login-input"
+                                placeholder="Número tarjeta"
+                                onChange={this
+                                    .onTarjetaChange
+                                    .bind(this)}
+                            />
+                        </div>
+                        <div className="input-group">
+                            <label htmlFor="username">Código de tarjeta</label>
+                            <input
+                                type="text"
+                                name="username"
+                                className="login-input"
+                                placeholder="Código tarjeta"
+                                onChange={this
+                                    .onTarjetaChange
+                                    .bind(this)}
+                            />
+                        </div>
+
+                        <button
+                            type="button"
+                            className="login-btn"
+                            disabled={this.state.confirmed}
+                            hidden={this.state.confirmed}
+                            onClick={
+                                () => {
+                                    if (!this.state.error) {
+                                        registerPurchase(true);
+                                        this.setState({confirmed: true});
+                                    } else {
+                                        this.setState({errorMessage: 'Formulario incompleto'})
+                                    }
+                                }
+                            }>
+                            Confirmar Pago
+                        </button>
+                        <small className="coupon-applied">{this.state.confirmed
+                            ? 'Su pago se procesó en la sucursal ' + getSubsidiary()
+                            : ""}</small>
+                        <small className="danger-error">{this.state.error
+                            ? this.state.errorMessage
+                            : ""}</small>
+
+                        <button
+                            type="button"
+                            className="login-btn"
+                            disabled={!this.state.confirmed}
+                            hidden={!this.state.confirmed}
+                            onClick={
+                                () => {
+                                    clearCart();
+                                }
+                            }>
+                            Aceptar
+                        </button>
+
                     </div>
                 </div>
             );

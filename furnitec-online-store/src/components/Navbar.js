@@ -29,6 +29,15 @@ class Navbar extends Component {
                         <span className="mr-2">
                             <i className="fas fa-cart-plus"/>
                         </span>
+                        Admin
+                    </ButtonContainer>
+                </Link>
+
+                <Link to="/admin" className="ml-auto">
+                    <ButtonContainer>
+                        <span className="mr-2">
+                            <i className="fas fa-cart-plus"/>
+                        </span>
                         Mi Carrito
                     </ButtonContainer>
                 </Link>
