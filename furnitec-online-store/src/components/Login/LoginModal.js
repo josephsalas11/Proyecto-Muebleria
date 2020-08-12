@@ -1,12 +1,8 @@
 import React, {Component} from 'react';
 import styled from "styled-components";
 import {ProductConsumer} from "../../context";
-
-
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-
-import TransitionGroup from "react-transition-group";
 import FadeTransition from "../../transitions/fadeTransition";
 import Select from "react-select";
 
@@ -219,9 +215,6 @@ class LoginBox extends React.Component {
 
 }
 
-function pop(props) {
-    return
-}
 
 class RegisterBox extends React.Component {
     constructor(props) {
@@ -549,15 +542,13 @@ class RegisterBox extends React.Component {
                                 .bind(this)}
                             onClick={
                                 () => {
-                                    console.log(' aqui1')
                                     let numErrors = this.submitRegister();
                                     if (numErrors === 0) {
-                                        console.log(' aqui2')
                                         fetch(`http://localhost:5000/register?p_name=${this.state.name}&p_lastname=${this.state.lastname}&p_birthdate=${this.state.birthDate}&p_address=${this.state.city}&p_email=${this.state.email}&p_username=${this.state.username}&p_password=${this.state.password}`)
                                             .then(res => res.json())
                                             .then((data) => {
                                                 const idUser = data.recordsets[0][0].result
-                                                console.log('idUser' + idUser)
+                                                console.log('idUser: ' + idUser)
                                                 closeLoginModal();
                                                 setLoginPerson(Number(idUser), this.state.username);
 
@@ -586,15 +577,3 @@ const StyledSelect = styled.div`
         background: rgba(15, 15, 15, 0.01);
     }
     `;
-//
-// .login-input {
-//     height: 2.1em;
-//     border-radius: 3px;
-//     border: 1px solid var(--lightBlue);
-//     transition: border 0.4s ease-out;
-//     padding: 13px;
-//     font-family: Oxygen, sans-serif;
-//     font-size: 19px;
-//     color: #3e3e42;
-//     background: rgba(15, 15, 15, 0.01);
-// }

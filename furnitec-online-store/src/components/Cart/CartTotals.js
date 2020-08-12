@@ -1,18 +1,21 @@
 import React, {Component} from "react";
 // import PayPalButton from "./PayPalButton";
 import {Link} from "react-router-dom";
+import PaymentModal from "./PaymentModal";
 
 export default class CartTotals extends Component {
     constructor(props) {
         super(props);
         this.state = {
             discountCoupon: '',
-            message: ''
+            couponApplied: '',
+            couponFail: '',
+            paymentFail: ''
         };
     }
 
     onCouponChange(e) {
-        this.setState({discountCoupon: e.target.value, message: ''});
+        this.setState({discountCoupon: e.target.value, couponApplied: '', couponFail: ''});
     }
 
     render() {
@@ -26,9 +29,10 @@ export default class CartTotals extends Component {
             clearCart,
             loginPerson,
             isLoginPerson,
-            getSPValidateCoupon
+            getSPValidateCoupon,
+            openPaymentModal
+
         } = this.props.value;
-        // const { history } = this.props;
         const emptyCart = productsInCart.length === 0;
         return (
             <React.Fragment>
@@ -60,31 +64,31 @@ export default class CartTotals extends Component {
                                                 .bind(this)
                                         }/>
                                 </h5>
-                                <h5 className="coupon-applied">
-                                    {this.state.message}
-                                </h5>
-
                                 <button
                                     type="button"
                                     className="coupon-btn"
                                     onClick={
                                         () => {
-                                            console.log(isLoginPerson)
                                             if (isLoginPerson) {
-                                                getSPValidateCoupon(loginPerson.idUser, this.state.discountCoupon)
-                                                console.log(coupon)
-                                                if (cartDiscount > 0) {
-                                                    this.setState({message: 'Cupón Aplicado'})
+                                                getSPValidateCoupon(loginPerson.idUser, this.state.discountCoupon);
+                                                if (coupon > 0) {
+                                                    this.setState({couponApplied: 'Cupón Aplicado'});
+                                                    this.setState({couponFail: ''});
                                                 } else {
-                                                    this.setState({message: 'Cupón Inválido'})
+                                                    this.setState({couponFail: 'Cupón Inválido'})
                                                 }
                                             } else {
-                                                this.setState({message: 'Debe Iniciar Sesión'})
+                                                this.setState({couponFail: 'Debe Iniciar Sesión'})
                                             }
                                         }
                                     }>Aplicar Código
                                 </button>
-
+                                <h5 className="coupon-applied">
+                                    {this.state.couponApplied}
+                                </h5>
+                                <h5 className="coupon-fail">
+                                    {this.state.couponFail}
+                                </h5>
                                 <h5>
                                     <span className="text-title"> subtotal :</span>{" "}
                                     <strong>$ {cartSubTotal} </strong>
@@ -102,12 +106,24 @@ export default class CartTotals extends Component {
                                     <strong>$ {cartTotal} </strong>
                                 </h5>
 
-
-                                {/*<PayPalButton*/}
-                                {/*    totalAmount={cartTotal}*/}
-                                {/*    clearCart={clearCart}*/}
-                                {/*    // history={history}*/}
-                                {/*/>*/}
+                                <button
+                                    type="button"
+                                    className="coupon-btn"
+                                    onClick={
+                                        () => {
+                                            if (isLoginPerson) {
+                                                openPaymentModal()
+                                                this.setState({paymentFail: ''})
+                                            } else {
+                                                this.setState({paymentFail: 'Debe Iniciar Sesión'})
+                                            }
+                                        }
+                                    }>Pagar
+                                </button>
+                                <h5 className="coupon-fail">
+                                    {this.state.paymentFail}
+                                </h5>
+                                <PaymentModal/>
                             </div>
                         </div>
                     </div>

@@ -14,6 +14,7 @@ class ProductProvider extends Component {
         modalOpen: false,
         modalProduct: [],
         loginModalOpen: false,
+        paymentModalOpen: false,
         loginPerson: [], // {idUser: "1", username: "Juan"}
         isLoginPerson: false,
         coupon: 0,
@@ -27,9 +28,9 @@ class ProductProvider extends Component {
         this.getProductos();
         this.getCategorias();
         this.getCities();
-        // this.getSPLogIn('username', 'password')
-        // this.getSPValidateCoupon(1, "coupon123")
 
+        // test
+        // this.setLoginPerson(1, 'username');
     };
 
     getProductos = () => {
@@ -42,21 +43,28 @@ class ProductProvider extends Component {
             .catch(console.log);
     };
 
-    getProductosbyCategoria = idcategory => {
-        fetch(`http://localhost:5000/products/bycategory?idcategory=${idcategory}`)
-            .then(res => res.json())
-            .then((data) => {
-                this.setState({productos: data.recordsets[0]});
-            })
-            .catch(console.log);
-    };
-
     getSPValidateCoupon = (idUser, coupon) => {
         fetch(`http://localhost:5000/coupon?idUser=${idUser}&coupon=${coupon}`)
             .then(res => res.json())
             .then((data) => {
                 this.setState({coupon: Number(data.recordsets[0][0].result)});
                 this.addTotals();
+            })
+            .catch(console.log);
+    }
+
+    registerPurchase = () => {
+        let products = this.state.productsInCart;
+        let temProducts = '';
+        for (const i in products) {
+            temProducts += `${Number(products[i].idProduct)}:${products[i].count}_`
+        }
+        temProducts = temProducts.slice(0, -1);
+
+        fetch(`http://localhost:5000/purchase?user=${this.state.loginPerson.idUser}&products=${temProducts}&coupon=${this.state.coupon}`)
+            .then(res => res.json())
+            .then((data) => {
+                console.log('purchase data: '+ data.recordsets[0][0])
             })
             .catch(console.log);
     }
@@ -125,6 +133,9 @@ class ProductProvider extends Component {
     openLoginModal = () => {
         this.setState({loginModalOpen: true})
     };
+    openPaymentModal = () => {
+        this.setState({paymentModalOpen: true})
+    };
 
     closeModal = () => {
         this.setState(() => {
@@ -134,6 +145,10 @@ class ProductProvider extends Component {
 
     closeLoginModal = () => {
         this.setState({loginModalOpen: false})
+    };
+
+    closePaymentModal = () => {
+        this.setState({paymentModalOpen: false})
     };
 
     insertItemArray = (arr, index, newItem) => [
@@ -265,6 +280,8 @@ class ProductProvider extends Component {
                 closeModal: this.closeModal,
                 openLoginModal: this.openLoginModal,
                 closeLoginModal: this.closeLoginModal,
+                openPaymentModal: this.openPaymentModal,
+                closePaymentModal: this.closePaymentModal,
                 addProductInCart: this.addProductInCart,
                 isProductInCart: this.isProductInCart,
                 increment: this.increment,
@@ -273,9 +290,8 @@ class ProductProvider extends Component {
                 getItem: this.getItem,
                 clearCart: this.clearCart,
                 setLoginPerson: this.setLoginPerson,
-                getSPValidateCoupon: this.getSPValidateCoupon
-                // getSPLogIn: this.getSPLogIn
-
+                getSPValidateCoupon: this.getSPValidateCoupon,
+                registerPurchase: this.registerPurchase
             }}>
                 {this.props.children}
             </ProductContext.Provider>

@@ -183,13 +183,13 @@ GO
 
 CREATE TABLE [dbo].[Contract]
 (
-    [idContract]    int            NOT NULL,
-    [idEmployee]    bigint         NOT NULL,
-    [idJob]         tinyint        NOT NULL,
-    [file]          varbinary(max) NOT NULL,
-    [baseSalary]    money          NOT NULL,
-    [admissionDate] date           NOT NULL,
-    [paymentDate]   date           NOT NULL,
+    [idContract]    int          NOT NULL,
+    [idEmployee]    bigint       NOT NULL,
+    [idJob]         tinyint      NOT NULL,
+    [file]          varchar(max) NOT NULL,
+    [baseSalary]    money        NOT NULL,
+    [admissionDate] date         NOT NULL,
+    [paymentDate]   date         NOT NULL,
 
 
     CONSTRAINT [PK_e] PRIMARY KEY CLUSTERED ([idContract] ASC),

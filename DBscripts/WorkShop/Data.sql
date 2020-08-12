@@ -311,3 +311,25 @@ VALUES
 (5,'Mantenimiento','Servicio de mantenimiento a muebles',1)
 
 GO
+
+
+USE [Workshop]
+GO
+
+
+INSERT INTO [dbo].[Contract]
+([idContract]
+,[idEmployee]
+,[idJob]
+,[file]
+,[baseSalary]
+,[admissionDate])
+VALUES(1,1,1,'Contract',2500,'2017-02-03'),
+      (2,2,1,'Contract',2500,'2017-02-03'),
+      (3,3,2,'Contract',2500,'2017-02-03'),
+      (4,4,3,'Contract',2500,'2017-02-03'),
+      (5,5,1,'Contract',2500,'2017-02-03'),
+      (6,6,2,'Contract',2500,'2017-02-03')
+
+
+GO
