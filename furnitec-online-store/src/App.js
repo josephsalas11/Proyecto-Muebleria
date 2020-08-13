@@ -9,6 +9,7 @@ import Cart from "./components/Cart/Cart";
 import Modal from "./components/Modal"
 import Default from "./components/Default";
 import LoginModal from "./components/Login/LoginModal";
+import Admin from "./components/Admin/Admin";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                 <Route exact path="/" component={ProductList}/>
                 <Route path="/details" component={Details}/>
                 <Route path="/cart" component={Cart}/>
+                <Route path="/admin" component={Admin}/>
                 <Route component={Default}/>
             </Switch>
             <Modal/>

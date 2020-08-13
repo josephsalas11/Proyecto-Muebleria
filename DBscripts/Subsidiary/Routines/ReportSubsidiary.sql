@@ -9,7 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[Report]
+ALTER PROCEDURE [dbo].[Report]
  @idEmployee SMALLINT = NULL,
  @product BIGINT = NULL,
  @start_date DATE = NULL,
@@ -19,7 +19,7 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		SELECT 1 AS #Sucursal, 'Sucursal Alajuela' AS Sucursal, ISNULL(e.idEmployee, 0) AS #Empleado,
+		SELECT 1 AS #Sucursal, 'Sucursal Cartago' AS Sucursal, ISNULL(e.idEmployee, 0) AS #Empleado,
 			ISNULL(u.[name] + ' ' + u.lastname, 'Sistema') AS Empleado, p.idProduct AS #Producto,
 			p.[name] AS Producto, pp.quantity AS Cantidad, pp.subtotal AS Total
 		FROM Purchase _p INNER JOIN PurchaseProduct pp ON (_p.idPurchase = pp.idPurchase)
@@ -54,7 +54,7 @@ GO
 
 
 
-CREATE PROCEDURE [dbo].[GainReport]
+ALTER PROCEDURE [dbo].[GainReport]
  @product BIGINT = NULL,
  @start_date DATE = NULL,
  @end_date DATE = NULL
@@ -63,7 +63,7 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
-		SELECT 1 AS #Sucursal, 'Sucursal Alajuela' AS Sucursal, p.idProduct AS #Producto,
+		SELECT 1 AS #Sucursal, 'Sucursal San José' AS Sucursal, p.idProduct AS #Producto,
 			p.[name] AS Producto, pp.quantity AS Cantidad, pp.subtotal * 0.87 - p.productionCost AS Total
 		FROM Purchase _p INNER JOIN PurchaseProduct pp ON (_p.idPurchase = pp.idPurchase)
 			INNER JOIN Product p ON (pp.idProduct = p.idProduct)

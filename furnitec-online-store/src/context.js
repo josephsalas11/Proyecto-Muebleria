@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {deleteModifier} from "react-dates/esm/utils/modifiers";
 
 const ProductContext = React.createContext();
 //Provider
@@ -7,6 +8,7 @@ const ProductContext = React.createContext();
 class ProductProvider extends Component {
     state = {
         productos: [],
+        ProductsSelect: [],
         productsInCart: [],
         detailProduct: [],
         categorias: [],
@@ -39,8 +41,15 @@ class ProductProvider extends Component {
         fetch('http://localhost:5000/products')
             .then(res => res.json())
             .then((data) => {
-                this.setState({productos: data.recordsets[0]});
-                this.setState({detailProduct: this.state.productos[0], modalProduct: this.state.productos[0]})
+                const temProducts = data.recordsets[0]
+                this.setState({productos: temProducts});
+                this.setState({detailProduct: this.state.productos[0], modalProduct: this.state.productos[0]});
+                const temProductsSelect = []
+                temProductsSelect.push({value: null, label: 'Todos los productos'});
+                for (const i in temProducts) {
+                    temProductsSelect.push({value: Number(temProducts[i].idProduct), label: temProducts[i].name});
+                }
+                this.setState({ProductsSelect: temProductsSelect});
             })
             .catch(console.log);
     };
@@ -59,7 +68,6 @@ class ProductProvider extends Component {
         fetch(`http://localhost:5000/isAdmin?idUser=${idUser}`)
             .then(res => res.json())
             .then((data) => {
-                console.log('is admin: ' + data.recordsets[0][0].result)
                 if (Number(data.recordsets[0][0].result) === 1) {
                     this.setState({isAdmin: true});
                 } else {
@@ -76,13 +84,23 @@ class ProductProvider extends Component {
             temProducts += `${Number(products[i].idProduct)}:${products[i].count}_`
         }
         temProducts = temProducts.slice(0, -1);
-        let test = `http://localhost:5000/purchase?user=${this.state.loginPerson.idUser}&products=${temProducts}&coupon=${this.state.coupon}&delivery=${delivery}`;
+        fetch(`http://localhost:5000/purchase?user=${this.state.loginPerson.idUser}&products=${temProducts}&coupon=${this.state.coupon}&delivery=${delivery}`)
+            .then(res => res.json())
+            .then((data) => {
+                let temIdSubsidiary = data.recordsets[0][0].idSubsidiary;
+                this.setState({idSubsidiary: temIdSubsidiary});
+                this.registerPayment(temIdSubsidiary);
+            })
+            .catch(console.log);
+    }
+
+    registerPayment = (idSubsidiary) => {
+        let test = `http://localhost:5000/payment?&amount=${this.state.cartTotal}&idPaymentMethod=${1}&idSubsidiary=${idSubsidiary}`;
         console.log(test)
         fetch(test)
             .then(res => res.json())
             .then((data) => {
-                this.setState({idSubsidiary: data.recordsets[0][0].idSubsidiary})
-                console.log('purchase data: ' + data.recordsets[0][0].idSubsidiary)
+                console.log('payment registered: ' + data)
             })
             .catch(console.log);
     }
@@ -322,6 +340,7 @@ class ProductProvider extends Component {
                 setLoginPerson: this.setLoginPerson,
                 getSPValidateCoupon: this.getSPValidateCoupon,
                 registerPurchase: this.registerPurchase,
+                registerPayment: this.registerPayment,
                 getSubsidiary: this.getSubsidiary
             }}>
                 {this.props.children}

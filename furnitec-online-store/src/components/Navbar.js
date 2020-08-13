@@ -29,18 +29,10 @@ class Navbar extends Component {
                         <span className="mr-2">
                             <i className="fas fa-cart-plus"/>
                         </span>
-                        Admin
-                    </ButtonContainer>
-                </Link>
-
-                <Link to="/admin" className="ml-auto">
-                    <ButtonContainer>
-                        <span className="mr-2">
-                            <i className="fas fa-cart-plus"/>
-                        </span>
                         Mi Carrito
                     </ButtonContainer>
                 </Link>
+
 
                 <ProductConsumer>
                     {value => {
@@ -54,15 +46,27 @@ class Navbar extends Component {
                                                  }>
                                     Iniciar Sesion
                                 </ButtonContainer>
+
                             )
                         } else {
-                            return (
-                                <ul className="navbar-nav align-items-center">
-                                    <li className="nav-link ml-2">
-                                        Bienvenido {value.loginPerson.username}
-                                    </li>
-                                </ul>
-                            )
+                            if (value.isAdmin) {
+                                return (
+                                    <Link to="/admin">
+                                        <ButtonContainer>
+                                            Admin
+                                        </ButtonContainer>
+                                    </Link>
+                                )
+                            } else {
+                                return (
+                                    <ul className="navbar-nav align-items-center">
+                                        <li className="nav-link ml-2">
+                                            Bienvenido {value.loginPerson.username}
+                                        </li>
+                                    </ul>
+                                )
+                            }
+
                         }
 
                     }}

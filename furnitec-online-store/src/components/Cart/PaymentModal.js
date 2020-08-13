@@ -61,7 +61,7 @@ export default class PaymentModal extends Component {
                                                                             .showLoginBox
                                                                             .bind(this)
                                                                     }>
-                                                                    Pago en linea
+                                                                    Delivery
                                                                 </div>
                                                                 <div
                                                                     className={"controller " + (this.state.isRegisterOpen
@@ -70,7 +70,7 @@ export default class PaymentModal extends Component {
                                                                     onClick={this
                                                                         .showRegisterBox
                                                                         .bind(this)}>
-                                                                    Pago en Sucursal
+                                                                    Pickup
                                                                 </div>
                                                             </div>
 
@@ -143,7 +143,7 @@ class SubsidiaryPaymentBox extends React.Component {
             return (
                 <div className="inner-container">
                     <div className="header">
-                        Pago en Sucursal
+                        Pickup
                     </div>
                     <div className="box">
                         <button
@@ -204,14 +204,14 @@ class OnlinePaymentBox extends React.Component {
     }
 
     render() {
-        const {paymentModalOpen, registerPurchase, getSubsidiary, clearCart} = this.props.value;
+        const {paymentModalOpen, registerPurchase,registerPayment, getSubsidiary, clearCart} = this.props.value;
         if (!paymentModalOpen) {
             return null;
         } else {
             return (
                 <div className="inner-container">
                     <div className="header">
-                        Pago en Linea
+                        Delivery
                     </div>
                     <div className="box">
 
@@ -249,6 +249,7 @@ class OnlinePaymentBox extends React.Component {
                                 () => {
                                     if (!this.state.error) {
                                         registerPurchase(true);
+                                        // registerPayment();
                                         this.setState({confirmed: true});
                                     } else {
                                         this.setState({errorMessage: 'Formulario incompleto'})

@@ -143,6 +143,21 @@ app.get('/isAdmin', (req, res) => {
     });
 });
 
+
+app.get('/idpurchase', (req, res) => {
+    const {idSubsidiary} = req.query;
+    const SP_isAdmin = `EXEC getPurchaseId @idSubsidiary = '${idSubsidiary}'`;
+    connection.query(SP_isAdmin, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
+
+
 // EXEC RegisterPurchase @user = 6, @subsidiary=null, @products = '1:2&2:2&3:3', @coupon= 1.5;
 // localhost:5000/purchase?user=6&products=1:2_2:2_3:3&coupon=1.5
 app.get('/purchase', (req, res) => {
@@ -162,6 +177,54 @@ app.get('/purchase', (req, res) => {
     });
 });
 
+
+app.get('/payment', (req, res) => {
+    const {amount} = req.query;
+    const {idPaymentMethod} = req.query;
+    const {idSubsidiary} = req.query;
+    const SP_RegisterPayment = `EXEC RegisterPayment @amount = '${amount}', @idPaymentMethod = '${idPaymentMethod}', @idSubsidiary = '${idSubsidiary}'`;
+    connection.query(SP_RegisterPayment, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
+
+app.get('/salesReport', (req, res) => {
+    let {idsubsidiary} = req.query;
+    let {idproduct} = req.query;
+    let {idemployee} = req.query;
+    let {from} = req.query;
+    let {to} = req.query;
+    const SP_Report = `EXEC Report @subsidiary = ${idsubsidiary}, @idEmployee = ${idemployee}, @product = ${idproduct}, @start_date = ${from}, @end_date = ${to}`;
+    connection.query(SP_Report, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
+
+app.get('/gainReport', (req, res) => {
+    let {idsubsidiary} = req.query;
+    let {idproduct} = req.query;
+    let {from} = req.query;
+    let {to} = req.query;
+    const SP_GainReport = `EXEC GainReport @subsidiary = ${idsubsidiary}, @product = ${idproduct}, @start_date = ${from}, @end_date = ${to}`;
+    connection.query(SP_GainReport, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
 
 app.listen(5000, function () {
     console.log('Server is running..');

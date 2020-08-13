@@ -8,7 +8,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE OR ALTER PROCEDURE [dbo].[Report]
+CREATE PROCEDURE [dbo].[Report]
  @subsidiary SMALLINT = NULL,
  @idEmployee INT = NULL,
  @product BIGINT = NULL,
@@ -44,6 +44,8 @@ BEGIN
 	END CATCH
 END
 GO
+
+EXEC Report;
 
 --***********************************************************************************************--
 
@@ -96,3 +98,4 @@ GO
 
 
 
+EXEC GainReport @subsidiary = null, @product = null, @start_date = null, @end_date = null;

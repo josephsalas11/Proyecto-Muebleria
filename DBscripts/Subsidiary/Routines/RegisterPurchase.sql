@@ -30,7 +30,7 @@ ALTER PROCEDURE [dbo].[RegisterPurchase]
                 SET @id = 1;
 
             INSERT INTO [dbo].[Purchase](idPurchase, idUser, [date], idEmployee, tax, detail, discount)
-            VALUES (@id, @user, GETDATE(), @employee, 0, @detail, @discount)
+            VALUES (@id, @user, GETDATE(), @employee, 13.0, @detail, @discount)
 
             IF (@delivery = 1)
                 BEGIN
