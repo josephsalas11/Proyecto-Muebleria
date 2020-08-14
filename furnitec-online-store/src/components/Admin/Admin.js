@@ -6,6 +6,9 @@ import styled from "styled-components";
 import DayPicker, {DateUtils} from 'react-day-picker';
 import 'react-day-picker/lib/style.css';
 import {ButtonContainer} from "../Button";
+// import ReactTable from "react-table";
+// import "react-table/react-table.css";
+import MaterialTable from "material-table"
 
 export default class Store extends Component {
     constructor(props) {
@@ -67,7 +70,9 @@ export default class Store extends Component {
             selectedProduct: {value: null, label: 'Todos los Productos'},
             selectedEmployee: {value: null, label: 'Todos los Empleados'},
             from: undefined,
-            to: undefined
+            to: undefined,
+            gainReport: [],
+            salesReport: []
         })
     }
 
@@ -78,7 +83,7 @@ export default class Store extends Component {
             <section>
                 <ProductConsumer>
                     {value => {
-                        const {isAdmin, ProductsSelect} = value;
+                        const {isAdmin, ProductsSelect, employees} = value;
                         if (isAdmin) {
                             return (
                                 <React.Fragment>
@@ -101,8 +106,8 @@ export default class Store extends Component {
                                                                 </div>
 
                                                                 <div className="col">
-                                                                    <div className="row mt-3 text-center">
-                                                                        <div className="col">
+                                                                    <div className="row mt-3 text-center mr-2">
+                                                                        <div className="col text-left">
                                                                             <Select
                                                                                 placeholder="Select Option"
                                                                                 value={this.state.selectedOption} // set selected value
@@ -133,7 +138,7 @@ export default class Store extends Component {
                                                                             />
                                                                         </div>
 
-                                                                        <div className="col">
+                                                                        <div className="col text-left">
                                                                             <Select
                                                                                 placeholder="Select Option"
                                                                                 value={this.state.selectedProduct} // set selected value
@@ -150,11 +155,11 @@ export default class Store extends Component {
                                                                                 })}
                                                                             />
                                                                         </div>
-                                                                        <div className="col">
+                                                                        <div className="col text-left">
                                                                             <Select
                                                                                 placeholder="Select Option"
                                                                                 value={this.state.selectedEmployee} // set selected value
-                                                                                options={ProductsSelect} // set list of the data
+                                                                                options={employees} // set list of the data
                                                                                 onChange={this.handleEmployeeChange} // assign onChange function
                                                                                 theme={(theme) => ({
                                                                                     ...theme,
@@ -170,29 +175,45 @@ export default class Store extends Component {
                                                                     </div>
 
 
-                                                                    <div className="row mt-5 text-center">
+                                                                    <div className="row mt-5 text-center mr-2">
                                                                         <div className="col">
                                                                             <ButtonContainer
                                                                                 onClick={() => {
-                                                                                    console.log('mostrar reporte')
-                                                                                }
-                                                                                }>
-                                                                                Reporte Ventas
-                                                                            </ButtonContainer>
-                                                                        </div>
-                                                                        <div className="col">
-                                                                            <ButtonContainer
-                                                                                onClick={() => {
-                                                                                    fetch(`http://localhost:5000/gainReport?idsubsidiary=${this.state.selectedOption.value}&idproduct=${this.state.selectedProduct.value}&from=${this.getDate().from}&to=${this.getDate().to}`)
+                                                                                    let test;
+                                                                                    if (this.getDate().from !== null && this.getDate().to !== null) {
+                                                                                        test = `http://localhost:5000/gainReport?idsubsidiary=${this.state.selectedOption.value}&idproduct=${this.state.selectedProduct.value}&from='${this.getDate().from}'&to='${this.getDate().to}'`;
+                                                                                    } else {
+                                                                                        test = `http://localhost:5000/gainReport?idsubsidiary=${this.state.selectedOption.value}&idproduct=${this.state.selectedProduct.value}&from=${null}&to=${null}`;
+                                                                                    }
+                                                                                    fetch(test)
                                                                                         .then(res => res.json())
                                                                                         .then((data) => {
-                                                                                            console.log(data.recordsets[0])
-
+                                                                                            this.setState({gainReport: data.recordsets[0]})
                                                                                         })
                                                                                         .catch(console.log);
                                                                                 }
                                                                                 }>
                                                                                 Reporte Ganancias
+                                                                            </ButtonContainer>
+                                                                        </div>
+                                                                        <div className="col">
+                                                                            <ButtonContainer
+                                                                                onClick={() => {
+                                                                                    let test;
+                                                                                    if (this.getDate().from !== null && this.getDate().to !== null) {
+                                                                                        test = `http://localhost:5000/salesReport?idsubsidiary=${this.state.selectedOption.value}&idproduct=${this.state.selectedProduct.value}&idemployee=${this.state.selectedEmployee.value}&from='${this.getDate().from}'&to='${this.getDate().to}'`;
+                                                                                    } else {
+                                                                                        test = `http://localhost:5000/salesReport?idsubsidiary=${this.state.selectedOption.value}&idproduct=${this.state.selectedProduct.value}&idemployee=${this.state.selectedEmployee.value}&from=${null}&to=${null}`;
+                                                                                    }
+                                                                                    fetch(test)
+                                                                                        .then(res => res.json())
+                                                                                        .then((data) => {
+                                                                                            this.setState({salesReport: data.recordsets[0]})
+                                                                                        })
+                                                                                        .catch(console.log);
+                                                                                }
+                                                                                }>
+                                                                                Reporte Ventas
                                                                             </ButtonContainer>
                                                                         </div>
                                                                         <div className="col">
@@ -211,6 +232,82 @@ export default class Store extends Component {
                                                             <div className="row">
 
                                                             </div>
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <MaterialTable
+                                                                title="Reporte de Ganancias"
+                                                                data={this.state.gainReport}
+                                                                isLoading={
+                                                                    this.state.gainReport.length === 0
+                                                                }
+                                                                columns={[{
+                                                                    title: '#Sucursal',
+                                                                    field: '#Sucursal'
+                                                                }, {
+                                                                    title: 'Sucursal',
+                                                                    field: 'Sucursal'
+                                                                }, {
+                                                                    title: '#Producto',
+                                                                    field: '#Producto'
+                                                                }, {
+                                                                    title: 'Producto',
+                                                                    field: 'Producto'
+                                                                }, {
+                                                                    title: 'Cantidad',
+                                                                    field: 'Cantidad'
+                                                                }, {
+                                                                    title: 'Total',
+                                                                    field: 'Total'
+                                                                }
+                                                                ]}
+                                                                options={{
+                                                                    search: true,
+                                                                    filtering: true,
+                                                                    exportButton: true
+                                                                }}
+
+                                                            />
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <MaterialTable
+                                                                title="Reporte de Ventas"
+                                                                data={this.state.salesReport}
+                                                                isLoading={
+                                                                    this.state.salesReport.length === 0
+                                                                }
+                                                                columns={[{
+                                                                    title: '#Sucursal',
+                                                                    field: '#Sucursal'
+                                                                }, {
+                                                                    title: 'Sucursal',
+                                                                    field: 'Sucursal'
+                                                                }, {
+                                                                    title: '#Empleado',
+                                                                    field: '#Empleado'
+                                                                }, {
+                                                                    title: 'Empleado',
+                                                                    field: 'Empleado'
+                                                                }, {
+                                                                    title: '#Producto',
+                                                                    field: '#Producto'
+                                                                }, {
+                                                                    title: 'Producto',
+                                                                    field: 'Producto'
+                                                                }, {
+                                                                    title: 'Cantidad',
+                                                                    field: 'Cantidad'
+                                                                }, {
+                                                                    title: 'Total',
+                                                                    field: 'Total'
+                                                                }
+                                                                ]}
+                                                                options={{
+                                                                    search: true,
+                                                                    filtering: true,
+                                                                    exportButton: true
+                                                                }}
+
+                                                            />
                                                         </div>
                                                     </StyledSelect>
                                                 }}
@@ -235,9 +332,12 @@ export default class Store extends Component {
 
 const StyledSelect = styled.div`
     .user-select {
-        padding: 0.2rem 0.4rem;
-        border: none;
+        border-radius: 5px;
+        border: 1px solid var(--lightBlue);
+        transition: border 0.4s ease-out;
         color: var(--mainWhiteWrapper);
         font-size: 1.2rem;
+        color: #3e3e42;
+        background: rgba(15, 15, 15, 0.01);
     }
     `;

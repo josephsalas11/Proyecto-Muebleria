@@ -98,4 +98,4 @@ GO
 
 
 
-EXEC GainReport @subsidiary = null, @product = null, @start_date = null, @end_date = null;
+EXEC GainReport @subsidiary = null, @product = null, @start_date = '2020-8-1', @end_date = '2020-8-27';

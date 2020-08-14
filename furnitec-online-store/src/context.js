@@ -12,14 +12,17 @@ class ProductProvider extends Component {
         productsInCart: [],
         detailProduct: [],
         categorias: [],
+        employees: [],
         cities: [],
         modalOpen: false,
         modalProduct: [],
         loginModalOpen: false,
         paymentModalOpen: false,
+        scoreModalOpen: false,
         loginPerson: [], // {idUser: "1", username: "Juan"}
         isLoginPerson: false,
         isAdmin: false,
+        isDelivery: false,
         idSubsidiary: 0,
         coupon: 0,
         cartSubTotal: 0,
@@ -32,9 +35,10 @@ class ProductProvider extends Component {
         this.getProductos();
         this.getCategorias();
         this.getCities();
+        this.getEmplooyees();
 
         // test
-        this.setLoginPerson(2, 'username');
+        // this.setLoginPerson(2, 'username');
     };
 
     getProductos = () => {
@@ -62,7 +66,7 @@ class ProductProvider extends Component {
                 this.addTotals();
             })
             .catch(console.log);
-    }
+    };
 
     getSPisAdmin = (idUser) => {
         fetch(`http://localhost:5000/isAdmin?idUser=${idUser}`)
@@ -75,7 +79,22 @@ class ProductProvider extends Component {
                 }
             })
             .catch(console.log);
-    }
+    };
+
+    getEmplooyees = () => {
+        fetch(`http://localhost:5000/employees`)
+            .then(res => res.json())
+            .then((data) => {
+                const temEmployees = data.recordsets[0];
+                const temEmployeesSelected = []
+                temEmployeesSelected.push({value: null, label: 'Todos los empleados'});
+                for (const i in temEmployees) {
+                    temEmployeesSelected.push({value: Number(temEmployees[i].value), label: temEmployees[i].label});
+                }
+                this.setState({employees: temEmployeesSelected});
+            })
+            .catch(console.log);
+    };
 
     registerPurchase = (delivery) => {
         let products = this.state.productsInCart;
@@ -92,23 +111,34 @@ class ProductProvider extends Component {
                 this.registerPayment(temIdSubsidiary);
             })
             .catch(console.log);
-    }
+    };
 
     registerPayment = (idSubsidiary) => {
-        let test = `http://localhost:5000/payment?&amount=${this.state.cartTotal}&idPaymentMethod=${1}&idSubsidiary=${idSubsidiary}`;
-        console.log(test)
-        fetch(test)
+        fetch(`http://localhost:5000/payment?&amount=${this.state.cartTotal}&idPaymentMethod=${1}&idSubsidiary=${idSubsidiary}`)
             .then(res => res.json())
             .then((data) => {
                 console.log('payment registered: ' + data)
             })
             .catch(console.log);
-    }
+    };
+
+    registerScore = (comment, value) => {
+        fetch(`http://localhost:5000/score?&idsubsidiary=${this.state.idSubsidiary}&comment=${comment}&value=${value}`)
+            .then(res => res.json())
+            .then((data) => {
+                console.log('score registered: ' + data)
+            })
+            .catch(console.log);
+    };
 
     setLoginPerson = (idUser, username) => {
         this.setState({loginPerson: {idUser: idUser, username: username}, isLoginPerson: true});
         this.getSPisAdmin(idUser);
-    }
+    };
+
+    setDelivery = (value) => {
+        this.setState({isDelivery: value});
+    };
 
     getCategorias = () => {
         fetch('http://localhost:5000/categories')
@@ -122,7 +152,7 @@ class ProductProvider extends Component {
                 this.setState({categorias: data.recordsets[0]});
             })
             .catch(console.log)
-    }
+    };
 
     getCities = () => {
         fetch('http://localhost:5000/cities')
@@ -131,7 +161,7 @@ class ProductProvider extends Component {
                 this.setState({cities: data.recordsets[0]});
             })
             .catch(console.log)
-    }
+    };
 
     addProductInCart = (idProduct) => {
         let temproductsInCart = [...this.state.productsInCart];
@@ -146,7 +176,7 @@ class ProductProvider extends Component {
     isProductInCart = (idProduct) => {
         return this.state.productsInCart.find(item => item.idProduct === idProduct.toString()) !== undefined;
 
-    }
+    };
 
     getItem = (idProduct) => {
         return this.state.productos.find(item => item.idProduct === idProduct);
@@ -174,6 +204,10 @@ class ProductProvider extends Component {
         this.setState({paymentModalOpen: true})
     };
 
+    openScoreModal = () => {
+        this.setState({scoreModalOpen: true})
+    };
+
     closeModal = () => {
         this.setState(() => {
             return {modalOpen: false};
@@ -182,6 +216,10 @@ class ProductProvider extends Component {
 
     closeLoginModal = () => {
         this.setState({loginModalOpen: false})
+    };
+
+    closeScoreModal = () => {
+        this.setState({scoreModalOpen: false})
     };
 
     closePaymentModal = () => {
@@ -273,7 +311,7 @@ class ProductProvider extends Component {
         } else if (idSubsidiary === 3) {
             return 'Alajuela'
         }
-    }
+    };
 
     addTotals = () => {
         const totals = this.getTotals();
@@ -330,6 +368,8 @@ class ProductProvider extends Component {
                 closeLoginModal: this.closeLoginModal,
                 openPaymentModal: this.openPaymentModal,
                 closePaymentModal: this.closePaymentModal,
+                openScoreModal: this.openScoreModal,
+                closeScoreModal: this.closeScoreModal,
                 addProductInCart: this.addProductInCart,
                 isProductInCart: this.isProductInCart,
                 increment: this.increment,
@@ -338,9 +378,11 @@ class ProductProvider extends Component {
                 getItem: this.getItem,
                 clearCart: this.clearCart,
                 setLoginPerson: this.setLoginPerson,
+                setDelivery: this.setDelivery,
                 getSPValidateCoupon: this.getSPValidateCoupon,
                 registerPurchase: this.registerPurchase,
                 registerPayment: this.registerPayment,
+                registerScore: this.registerScore,
                 getSubsidiary: this.getSubsidiary
             }}>
                 {this.props.children}

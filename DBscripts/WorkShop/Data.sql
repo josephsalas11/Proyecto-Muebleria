@@ -186,28 +186,29 @@ USE [Workshop]
 GO
 
 INSERT INTO [dbo].[Product]
-([idProduct]
-,[idCategory]
-,[name]
-,[description]
-,[photo]
-,[manufacturingDate]
-,[productionCost]
-,[finalCost]
-,[enable])
-VALUES
-(6,3,'Cama Individual' ,'Cama de 1x1.5 metros con acabado de yipson',
- 'https://gollo-prod-grupounicomer.netdna-ssl.com/media/catalog/product/cache/b0a55a6bc5da505f12fc291d1ff66806/4/2/4201010620.jpg','2018-01-06' ,275,
- 325,1),
-(7,4,'Silla de escritorio Raptor' ,'Silla de oficina ortopédica para posicion de espalda',
- 'https://media.nidux.net/pull/800/599/3190/93759_product_5b282ed5dd3aealt%20%20silla-oficina-elegante-moderna-cuero-negro.jpg','2020-02-26' ,175,
- 250,1),
-(8,4,'Escritorio de madera' ,'Escritorio con madera de pino y acabados en marmol',
- 'https://i.pinimg.com/564x/f7/ca/52/f7ca52a3002207bf1b0f42028e38a5a0.jpg','2017-08-06' ,750,
- 1075,1),
-(9,5,'Trampolin de exterior' ,'Trampolin 5x5 metros para niños',
- 'https://images-na.ssl-images-amazon.com/images/I/61bBT06psFL._AC_SX425_.jpg','2019-07-06' ,368,
- 500,1)
+( [idProduct]
+, [idCategory]
+, [name]
+, [description]
+, [photo]
+, [manufacturingDate]
+, [productionCost]
+, [finalCost]
+, [enable])
+VALUES (6, 3, 'Cama Individual', 'Cama de 1x1.5 metros con acabado de yipson',
+        'https://gollo-prod-grupounicomer.netdna-ssl.com/media/catalog/product/cache/b0a55a6bc5da505f12fc291d1ff66806/4/2/4201010620.jpg',
+        '2018-01-06', 275,
+        325, 1),
+       (7, 4, 'Silla de escritorio Raptor', 'Silla de oficina ortopédica para posicion de espalda',
+        'https://media.nidux.net/pull/800/599/3190/93759_product_5b282ed5dd3aealt%20%20silla-oficina-elegante-moderna-cuero-negro.jpg',
+        '2020-02-26', 175,
+        250, 1),
+       (8, 4, 'Escritorio de madera', 'Escritorio con madera de pino y acabados en marmol',
+        'https://i.pinimg.com/564x/f7/ca/52/f7ca52a3002207bf1b0f42028e38a5a0.jpg', '2017-08-06', 750,
+        1075, 1),
+       (9, 5, 'Trampolin de exterior', 'Trampolin 5x5 metros para niños',
+        'https://images-na.ssl-images-amazon.com/images/I/61bBT06psFL._AC_SX425_.jpg', '2019-07-06', 368,
+        500, 1)
 GO
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -216,14 +217,13 @@ USE [Workshop]
 GO
 
 INSERT INTO [dbo].[Subsidiary]
-([idSubsidiary]
-,[name]
-,[address]
-,[provincia])
-VALUES
-(1,'FurniTEC Cartago',geography::Point(9.863237, -83.913084, 4326),'Cartago'),
-(2,'FurniTEC San Jose',geography::Point(9.930754, -84.045469, 4326),'San Jose'),
-(3,'FurniTEC Alajuela',geography::Point(10.012575, -84.213294, 4326),'Alajuela')
+( [idSubsidiary]
+, [name]
+, [address]
+, [provincia])
+VALUES (1, 'FurniTEC Cartago', geography::Point(9.863237, -83.913084, 4326), 'Cartago'),
+       (2, 'FurniTEC San Jose', geography::Point(9.930754, -84.045469, 4326), 'San Jose'),
+       (3, 'FurniTEC Alajuela', geography::Point(10.012575, -84.213294, 4326), 'Alajuela')
 GO
 
 
@@ -234,45 +234,146 @@ USE [Workshop]
 GO
 
 INSERT INTO [dbo].[Stock]
-([idStock]
-,[idProduct]
-,[idSubsidiary]
-,[quantity])
-VALUES
-(1,1,1,32),(2,1,2,15),(3,1,3,16),(4,2,1,12),(5,2,2,3),(6,2,3,14),
-(7,3,1,17),(8,3,2,2),(9,3,3,22),(10,4,1,13),(11,4,2,32),(12,4,3,16),
-(13,5,1,18),(14,5,2,39),(15,5,3,12),(16,6,1,1),(17,6,2,14),(18,6,3,32),
-(19,7,1,36),(20,7,2,14),(21,7,3,14),(22,8,1,12),(23,8,2,32),(24,8,3,1)
+( [idStock]
+, [idProduct]
+, [idSubsidiary]
+, [quantity])
+VALUES (1, 1, 1, 32),
+       (2, 2, 1, 15),
+       (3, 3, 1, 16),
+       (4, 4, 1, 12),
+       (5, 5, 1, 3),
+       (6, 6, 1, 14),
+       (7, 7, 1, 17),
+       (8, 8, 1, 2),
+       (9, 9, 1, 22),
+       (10, 10, 1, 13),
+       (11, 11, 1, 32),
+       (12, 12, 1, 16),
+       (13, 13, 1, 18),
+       (14, 14, 1, 39),
+       (15, 15, 1, 12),
+       (16, 16, 1, 1),
+       (17, 17, 1, 14),
+       (18, 18, 1, 32),
+       (19, 19, 1, 36),
+       (20, 20, 1, 14),
+       (21, 21, 1, 14),
+       (22, 22, 1, 12),
+       (23, 23, 1, 32),
+       (24, 24, 1, 0),
+       (25, 25, 1, 23),
+       (26, 26, 1, 54),
+       (27, 27, 1, 0),
+       (28, 28, 1, 12),
+       (29, 29, 1, 5),
+       (30, 30, 1, 9),
+       (31, 31, 1, 9),
+       (32, 32, 1, 2)
+GO
+INSERT INTO [dbo].[Stock]
+( [idStock]
+, [idProduct]
+, [idSubsidiary]
+, [quantity])
+VALUES (33, 1, 2, 32),
+       (34, 2, 2, 15),
+       (35, 3, 2, 16),
+       (36, 4, 2, 12),
+       (37, 5, 2, 3),
+       (38, 6, 2, 14),
+       (39, 7, 2, 17),
+       (40, 8, 2, 2),
+       (41, 9, 2, 22),
+       (42, 10, 2, 13),
+       (43, 11, 2, 32),
+       (44, 12, 2, 16),
+       (45, 13, 2, 18),
+       (46, 14, 2, 39),
+       (47, 15, 2, 12),
+       (48, 16, 2, 1),
+       (49, 17, 2, 14),
+       (50, 18, 2, 32),
+       (51, 19, 2, 36),
+       (52, 20, 2, 14),
+       (53, 21, 2, 14),
+       (54, 22, 2, 12),
+       (55, 23, 2, 32),
+       (56, 24, 2, 0),
+       (57, 25, 2, 23),
+       (58, 26, 2, 54),
+       (59, 27, 2, 0),
+       (60, 28, 2, 12),
+       (61, 29, 2, 5),
+       (62, 30, 2, 9),
+       (63, 31, 2, 9),
+       (64, 32, 2, 2)
+GO
+INSERT INTO [dbo].[Stock]
+( [idStock]
+, [idProduct]
+, [idSubsidiary]
+, [quantity])
+VALUES (65, 1, 3, 32),
+       (66, 2, 3, 15),
+       (67, 3, 3, 16),
+       (68, 4, 3, 12),
+       (69, 5, 3, 3),
+       (70, 6, 3, 14),
+       (71, 7, 3, 17),
+       (72, 8, 3, 2),
+       (73, 9, 3, 22),
+       (74, 10, 3, 13),
+       (75, 11, 3, 32),
+       (76, 12, 3, 16),
+       (77, 13, 3, 18),
+       (78, 14, 3, 39),
+       (79, 15, 3, 12),
+       (80, 16, 3, 1),
+       (81, 17, 3, 14),
+       (82, 18, 3, 32),
+       (83, 19, 3, 36),
+       (84, 20, 3, 14),
+       (85, 21, 3, 14),
+       (86, 22, 3, 12),
+       (87, 23, 3, 32),
+       (88, 24, 3, 0),
+       (89, 25, 3, 23),
+       (90, 26, 3, 54),
+       (91, 27, 3, 0),
+       (92, 28, 3, 12),
+       (93, 29, 3, 5),
+       (94, 30, 3, 9),
+       (95, 31, 3, 9),
+       (96, 32, 3, 2)
 GO
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO [dbo].[ContactType]
-([idContactType]
-,[name]
-,[description]
-,[enable])
-VALUES
-(1,'Numero telefonico','Contacto via llamada y whatsapp',1),
-(2,'Correo electronico','Contacto via correo electronico',1),
-(3,'Instagram','Contacto via instagram',1)
+( [idContactType]
+, [name]
+, [description]
+, [enable])
+VALUES (1, 'Numero telefonico', 'Contacto via llamada y whatsapp', 1),
+       (2, 'Correo electronico', 'Contacto via correo electronico', 1),
+       (3, 'Instagram', 'Contacto via instagram', 1)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 INSERT INTO [dbo].[SubsidiaryContact]
-([idSubsidiaryContact]
-,[idSubsidiary]
-,[idTypeContact]
-,[contact]
-,[enable])
-VALUES
-(1,1,1,'70708989',1),
-(2,1,2,'furcartago@gmail.com',1),
-(3,1,3,'FurTEC_CAR',1),
-(4,2,1,'70769989',1),
-(5,2,2,'fursj@gmail.com',1),
-(6,3,1,'70148989',1),
-(7,3,2,'furalj@gmail.com',1),
-(8,3,3,'FurTEC_ALJ',1)
+( [idSubsidiaryContact]
+, [idSubsidiary]
+, [idTypeContact]
+, [contact]
+, [enable])
+VALUES (1, 1, 1, '70708989', 1),
+       (2, 1, 2, 'furcartago@gmail.com', 1),
+       (3, 1, 3, 'FurTEC_CAR', 1),
+       (4, 2, 1, '70769989', 1),
+       (5, 2, 2, 'fursj@gmail.com', 1),
+       (6, 3, 1, '70148989', 1),
+       (7, 3, 2, 'furalj@gmail.com', 1),
+       (8, 3, 3, 'FurTEC_ALJ', 1)
 GO
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -281,17 +382,16 @@ USE [Workshop]
 GO
 
 INSERT INTO [dbo].[Employee]
-([idEmployee]
-,[idSubsidiary]
-,[user]
-,[photo])
-VALUES
-(1,1,36,'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg'),
-(2,1,37,'https://laboratoriosniam.com/wp-content/uploads/2018/07/michael-dam-258165-unsplash_WEB2.jpg'),
-(3,1,38,'https://laboratoriosniam.com/wp-content/uploads/2018/07/personas-felices-tiempoparasimismos.jpg'),
-(4,1,39,'https://laboratoriosniam.com/wp-content/uploads/2018/07/personas-felices-quimica.jpg'),
-(5,1,40,'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg'),
-(6,1,41,'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg')
+( [idEmployee]
+, [idSubsidiary]
+, [user]
+, [photo])
+VALUES (1, 1, 36, 'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg'),
+       (2, 1, 37, 'https://laboratoriosniam.com/wp-content/uploads/2018/07/michael-dam-258165-unsplash_WEB2.jpg'),
+       (3, 1, 38, 'https://laboratoriosniam.com/wp-content/uploads/2018/07/personas-felices-tiempoparasimismos.jpg'),
+       (4, 1, 39, 'https://laboratoriosniam.com/wp-content/uploads/2018/07/personas-felices-quimica.jpg'),
+       (5, 1, 40, 'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg'),
+       (6, 1, 41, 'https://www.trecebits.com/wp-content/uploads/2019/02/Persona-1-445x445.jpg')
 GO
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -300,15 +400,14 @@ USE [Workshop]
 GO
 
 INSERT INTO [dbo].[Job]
-([idJob]
-,[name]
-,[description]
-,[enable])
-VALUES
-(1,'Gerente General','Gerente general de tienda',1),
-(2,'Vendedor','Vendedor de zona',1),
-(3,'Repartidor','Mensajeria delivery',1),
-(5,'Mantenimiento','Servicio de mantenimiento a muebles',1)
+( [idJob]
+, [name]
+, [description]
+, [enable])
+VALUES (1, 'Gerente General', 'Gerente general de tienda', 1),
+       (2, 'Vendedor', 'Vendedor de zona', 1),
+       (3, 'Repartidor', 'Mensajeria delivery', 1),
+       (5, 'Mantenimiento', 'Servicio de mantenimiento a muebles', 1)
 
 GO
 
@@ -318,18 +417,18 @@ GO
 
 
 INSERT INTO [dbo].[Contract]
-([idContract]
-,[idEmployee]
-,[idJob]
-,[file]
-,[baseSalary]
-,[admissionDate])
-VALUES(1,1,1,'Contract',2500,'2017-02-03'),
-      (2,2,1,'Contract',2500,'2017-02-03'),
-      (3,3,2,'Contract',2500,'2017-02-03'),
-      (4,4,3,'Contract',2500,'2017-02-03'),
-      (5,5,1,'Contract',2500,'2017-02-03'),
-      (6,6,2,'Contract',2500,'2017-02-03')
+( [idContract]
+, [idEmployee]
+, [idJob]
+, [file]
+, [baseSalary]
+, [admissionDate])
+VALUES (1, 1, 1, 'Contract', 2500, '2017-02-03'),
+       (2, 2, 1, 'Contract', 2500, '2017-02-03'),
+       (3, 3, 2, 'Contract', 2500, '2017-02-03'),
+       (4, 4, 3, 'Contract', 2500, '2017-02-03'),
+       (5, 5, 1, 'Contract', 2500, '2017-02-03'),
+       (6, 6, 2, 'Contract', 2500, '2017-02-03')
 
 
 GO

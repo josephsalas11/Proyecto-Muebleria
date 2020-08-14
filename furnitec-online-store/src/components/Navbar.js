@@ -49,6 +49,17 @@ class Navbar extends Component {
 
                             )
                         } else {
+                            if (value.isDelivery) {
+                                return (
+                                    <ButtonContainer className="ml-2"
+                                                     disabled={!value.loginPerson}
+                                                     onClick={() => {
+                                                         value.openScoreModal()
+                                                     }
+                                                     }>
+                                        Calificar Delivery
+                                    </ButtonContainer>)
+                            }
                             if (value.isAdmin) {
                                 return (
                                     <Link to="/admin">

@@ -204,7 +204,7 @@ class OnlinePaymentBox extends React.Component {
     }
 
     render() {
-        const {paymentModalOpen, registerPurchase,registerPayment, getSubsidiary, clearCart} = this.props.value;
+        const {paymentModalOpen, registerPurchase,registerPayment, getSubsidiary, clearCart, setDelivery} = this.props.value;
         if (!paymentModalOpen) {
             return null;
         } else {
@@ -215,7 +215,7 @@ class OnlinePaymentBox extends React.Component {
                     </div>
                     <div className="box">
 
-                        <div className="input-group">
+                        <div className="input-group" hidden={this.state.confirmed}>
                             <label htmlFor="username">Número de tarjeta</label>
                             <input
                                 type="text"
@@ -227,7 +227,7 @@ class OnlinePaymentBox extends React.Component {
                                     .bind(this)}
                             />
                         </div>
-                        <div className="input-group">
+                        <div className="input-group" hidden={this.state.confirmed}>
                             <label htmlFor="username">Código de tarjeta</label>
                             <input
                                 type="text"
@@ -249,7 +249,8 @@ class OnlinePaymentBox extends React.Component {
                                 () => {
                                     if (!this.state.error) {
                                         registerPurchase(true);
-                                        // registerPayment();
+                                        setDelivery(true);
+                                        registerPayment();
                                         this.setState({confirmed: true});
                                     } else {
                                         this.setState({errorMessage: 'Formulario incompleto'})

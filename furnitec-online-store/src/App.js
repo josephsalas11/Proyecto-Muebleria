@@ -10,6 +10,7 @@ import Modal from "./components/Modal"
 import Default from "./components/Default";
 import LoginModal from "./components/Login/LoginModal";
 import Admin from "./components/Admin/Admin";
+import ScoreModal from "./components/Cart/Score";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
             </Switch>
             <Modal/>
             <LoginModal/>
+            <ScoreModal/>
         </React.Fragment>
     );
 }

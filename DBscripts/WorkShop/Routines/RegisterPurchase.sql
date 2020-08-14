@@ -26,21 +26,21 @@ GO
 
             IF (@subsidiary IS NULL)
                 BEGIN
-                    DECLARE @user_address GEOGRAPHY, @Lat INT, @Lon INT, @purchase INT;
+                    DECLARE @user_address GEOGRAPHY, @Lat float, @Lon float, @purchase INT;
                     DECLARE @geo TABLE
                                  (
-                                     Lo int,
-                                     La int
+                                     Lo float,
+                                     La float
                                  );
                     SET @sql = 'SELECT * FROM OPENQUERY(CUSTOMER_SERVICE, ''call GetLocation(' +
                                CAST(@user AS NVARCHAR(50)) + ')'')';
                     INSERT INTO @geo EXEC (@sql);
                     SELECT @Lat = La, @Lon = Lo FROM @geo
                     SET @user_address =
-                            geography::STGeomFromText('POINT(' + CAST(@Lon AS VARCHAR(20)) + ' ' + CAST(@Lat AS VARCHAR(20)) + ')', 4326);
+                            geography::STGeomFromText('POINT(' + CAST(@Lon AS VARCHAR(max)) + ' ' + CAST(@Lat AS VARCHAR(max)) + ')', 4326);
                     SELECT TOP 1 @subsidiary = [idSubsidiary], @distance = [address].STDistance(@user_address)
                     FROM [dbo].[Subsidiary]
-                    ORDER BY [address].STDistance(@user_address) ASC;
+                    ORDER BY [address].STDistance(@user_address);
                 END
 
             IF (@subsidiary = 1)
@@ -67,9 +67,8 @@ GO
     END
 
 
-
 --
-       EXEC RegisterPurchase @user = 3, @subsidiary=null, @products = '1:3_2:3_3:3', @coupon= '3.5', @delivery = 1;
+--     EXEC RegisterPurchase @user = 26, @subsidiary=null, @products = '1:3_2:3_3:3', @coupon= '3.5', @delivery = 1;
 --        EXEC RegisterPayment   @idPurchase=1, @amount=5000, @idPaymentMethod=1, @idSubsidiary=1;
 
 

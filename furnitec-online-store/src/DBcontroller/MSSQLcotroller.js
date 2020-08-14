@@ -157,6 +157,19 @@ app.get('/idpurchase', (req, res) => {
     });
 });
 
+app.get('/employees', (req, res) => {
+    const {idSubsidiary} = req.query;
+    const SP_GetEmployees = `EXEC get_employees`;
+    connection.query(SP_GetEmployees, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
+
 
 // EXEC RegisterPurchase @user = 6, @subsidiary=null, @products = '1:2&2:2&3:3', @coupon= 1.5;
 // localhost:5000/purchase?user=6&products=1:2_2:2_3:3&coupon=1.5
@@ -184,6 +197,21 @@ app.get('/payment', (req, res) => {
     const {idSubsidiary} = req.query;
     const SP_RegisterPayment = `EXEC RegisterPayment @amount = '${amount}', @idPaymentMethod = '${idPaymentMethod}', @idSubsidiary = '${idSubsidiary}'`;
     connection.query(SP_RegisterPayment, (err, results) => {
+        if (err) {
+            console.log(err);
+            return res.send(err)
+        } else {
+            return res.send(results)
+        }
+    });
+});
+
+app.get('/score', (req, res) => {
+    const {idsubsidiary} = req.query;
+    const {comment} = req.query;
+    const {value} = req.query;
+    const SP_RegisterScore = `EXEC RegisterScore @subsidiary = '${idsubsidiary}', @comment = '${comment}', @value = '${value}'`;
+    connection.query(SP_RegisterScore, (err, results) => {
         if (err) {
             console.log(err);
             return res.send(err)
